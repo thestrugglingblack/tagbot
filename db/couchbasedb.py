@@ -1,8 +1,19 @@
 from datetime import timedelta
 from couchbase.auth import PasswordAuthenticator
 from couchbase.cluster import Cluster
-from couchbase.options import (ClusterOptions, ClusterTimeoutOptions,
-                               QueryOptions)
+from couchbase.management.collections import (
+    CollectionSpec,
+    CreateCollectionSettings
+)
+from couchbase.options import (
+    ClusterOptions,
+    ClusterTimeoutOptions,
+)
+from couchbase.exceptions import (
+    CollectionAlreadyExistsException,
+    ScopeNotFoundException,
+)
+
 
 class CouchbaseDB:
     def __init__(self, username, password, bucket_name, host="localhost"):
@@ -16,11 +27,42 @@ class CouchbaseDB:
         self.bucket = self.cluster.bucket(bucket_name)
         self.collection_manager = self.bucket.collections()
 
+        collection_name = 'mortal_kombat_1'
+        scope_name = '_default' # Potentially set scope to multiple environments dev|val|prod
+
+        if scope_name != '_default':
+            try:
+                self.collection_manager.create_scope(scope_name)
+                print(f'Created scope {scope_name} successfully')
+            except Exception as e:
+                if 'already exists' in str(e):
+                    print(f'Scope {scope_name} already exists')
+                else:
+                    print(f'Failed to create scope {scope_name}')
+                    return
+
+
+        try:
+            self.collection_manager.create_collection(
+                scope_name,
+                collection_name,
+                settings=CreateCollectionSettings()
+            )
+            print(f'Created collection {collection_name} in scope {scope_name} successfully')
+        except ScopeNotFoundException:
+            print(f'Failed to create scope {scope_name}')
+        except CollectionAlreadyExistsException:
+            print(f'Collection {collection_name} already exists')
+        except Exception as e:
+            print(f'Failed to create collection {collection_name} due to {e}')
+
+
     def create_collection (self, collection_name):
         self.collection_manager.create_collection(collection_name)
 
     def get_collection (self, scope_name, collection_name):
         return self.bucket.scope(scope_name).collection(collection_name)
+
 
     def add_item_in_collection (self, collection_name, item_name, item_data):
         collection = self.get_collection(collection_name)

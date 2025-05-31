@@ -101,10 +101,11 @@ class TagBot(commands.Cog):
         try:
             redis_tag = self.redis_db.get(server_id,user_id)
             print(redis_tag)
+
             if not redis_tag:
                 print(f'{mention_user.id} or {mention_user} is not found in redis database going to couchbasedb')
-                try:
-                    couchbase_tag = self.couchbase_db.get(server_id,user_id)
+                # try:
+                #     couchbase_tag = self.couchbase_db.get(server_id,user_id)
 
 
             else:
