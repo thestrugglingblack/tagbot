@@ -11,3 +11,18 @@
       8 8888.8'       `8. `88888.  `8888888P'    8 888888888P       `8888888P'       8 8888       
 
 ```
+
+Shape of the data.
+```json
+"discord_username_id": {
+    "discord_username": "STRING",
+    "discords_server_list": [
+        {
+                "discord_id": "NUMBER",
+                "psn": "STRING",
+                "warnerbrothers":"STRING"
+                
+        }
+  ]
+}
+```

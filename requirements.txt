@@ -1,0 +1,5 @@
+discord.py
+redis
+couchbase
+python-dotenv>=0.15.0,<1.0.0
+
