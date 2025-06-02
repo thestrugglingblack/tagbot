@@ -138,14 +138,6 @@ class TagBot(commands.Cog):
                 if not tag:
                     print(f'{user_id} failed to add {platform} tag correctly')
                     await ctx.send(error_message)
-                break
-
-                # Check if user_id exists already
-                    # If user_id exists
-                        # Check if psn or wb are empty
-                            # Use update_partial_item_in_collection
-                    # If user_id doesnt exist
-                        # Create user with add_item_in_collection
 
                 try:
                     if not self.couchbase_db:
@@ -184,17 +176,25 @@ class TagBot(commands.Cog):
                             print(f'{platform} tag updated for user {user_id} : {tag}')
                 except Exception as e:
                     if 'not found' in str(e).lower():
-                        print(f'User {user_id} not found in Couchbase DB. Creating new entry...')
-                        self.couchbase_db.add_item_in_collection(
-                            collection_name='mortal_kombat_1',
-                            item_name=f'{user_id}',
-                            item_key={platform: tag},
-                        )
-                        print(f'User {user_id} added to Couchbase DB with {platform} tag.')
-                        await ctx.send(f'{platform} tag added for user {user_id}')
+                        print(f'{user_id} was not found in Couchbase DB...going to add now')
+                        try:
+                            print(f'User {user_id} not found in Couchbase DB. Creating new entry...')
+                            self.couchbase_db.add_item_in_collection(
+                                collection_name='mortal_kombat_1',
+                                item_name=f'{user_id}',
+                                item_data={platform: tag},
+                            )
+                            print(f'User {user_id} added to Couchbase DB with {platform} tag.')
+                            await ctx.send(f'{platform} tag added for user {user_id}')
+                        except Exception as e:
+                            print(f'Query to add user {user_id} to Couchbase DB failed: {e}')
+                            await ctx.send(
+                                f'Error occurred while adding {platform} tag for user {user_id}. Please contact support.')
+
+
                     else:
-                        print(f'Error occured while adding {user_id}: {e}')
-                        await ctx.send(f'Error occured while adding you to tagbot. Please contact tagbot adminsitration thestrugglingblack@gmail.com')
+                        print(f'A huge error occurred while adding {user_id}: {e}')
+                        await ctx.send(f'Error occurred while adding you to tagbot. Please contact tagbot administrator thestrugglingblack@gmail.com')
 
             else:
                 await ctx.send(
