@@ -14,7 +14,7 @@ COUCHBASE_USERNAME = os.getenv('COUCHBASE_USERNAME')
 COUCHBASE_PASSWORD = os.getenv('COUCHBASE_PASSWORD')
 COUCHBASE_BUCKET_NAME = os.getenv('COUCHBASE_BUCKET_NAME')
 
-if not COUCHBASE_USERNAME or not COUCHBASE_PASSWORD or not COUCHBASE_BUCKET_NAME:
+if not COUCHBASE_USERNAME or not COUCHBASE_PASSWORD or not COUCHBASE_BUCKET_NAME: # Update add this functionality as a utils function.
     raise ValueError("Couchbase environment variables are not properly set. Please check COUCHBASE_USERNAME, COUCHBASE_PASSWORD, and COUCHBASE_BUCKET_NAME.")
 
 class TagBot(commands.Cog):
@@ -62,57 +62,120 @@ class TagBot(commands.Cog):
 
         if not ctx.message.mentions:
             await ctx.send('Please mention the player when using tagbot. Example: tagbot tag @thestrugglingblack ')
-        print('Retrieving tags')
 
+        try:
+            print(f'Checking Redis for user {user_id}....')
+            redis_tag = self.redis_db.get(server_id,user_id)
+            print(f'The key being sent to Redis {redis_tag}...')
 
+            if not redis_tag:
+                print(f'{ctx.author} or {user_id} is not found in redis database going to couchbasedb')
+                if not self.couchbase_db:
+                    print('Couchbase DB is not initialized')
 
+                try:
+                    print(f'Retrieving {user_id} tag information from Couchbase DB...')
+                    check_for_tag = self.couchbase_db.get_item_in_collection(
+                        collection_name='mortal_kombat_1',
+                        item_name=f'{user_id}'
+                    )
+                    tag_data = check_for_tag.content_as[str]
+                    print(f'Tag found in couchbase DB for {user_id}: {tag_data}')
 
+                    self.redis_db.set(server_id, user_id, tag_data, ex=1800)
+                    print(f'Tag cached in Redis for 30 minutes: {tag_data}')
 
+                    await ctx.send(f'Here is {mention_user} tag information : {tag_data}')
+                except Exception as e:
+                    print(f'Failed to retrieve tag from Couchbase DB: {e}')
+            else:
+                print(f'Tag found in Redis: {redis_tag}')
+                await ctx.send(f'Tag found in Redis: {redis_tag}')
+        except Exception as e:
+            print(f'Failed to retrieve tag from Redis: {e}')
 
-        # Check is
-        print(mention_user)
-        print(user_id)
-        print(server_id)
-
-        # Check into Redis Cache
-
-        # If not in Redis Cache query for username using the discord server id and the user id
-            # If user exist return user tags for playstation and warner brothers
-            # If user does not exist return user does not exist please at them in channel.
-        print(ctx)
-
-
-        await ctx.send('Retrieving tags')
 
     @commands.command(name='add')
     async def add(self,ctx):
-        if not ctx.message.mentions:
-            await ctx.send('Please mention the user discord name when using tagbot.')
-
-
-        mention_user = ctx.message.mentions[0]
-        user_id = mention_user.id
+        # Update that only want the person who makes the call add their tag or admin to add their name (later release)
+        user_id = ctx.author.id
         server_id = ctx.guild.id
+        msg = ctx.message.content.strip().lower()
+        tag_to_add = {}
 
-        if not self.redis_db:
-            print('Redis DB is not initialized')
+        platforms = {
+            "psn": "Please enter a valid Playstation tag. For example: tagbot add psn thestrugglingblack ",
+            "wb": "Please enter a valid Warner Brothers tag. For example: tagbot add wb thestrugglingblack ",
+        }
 
+        # Update logic to account for mistypes or complete misses. i.e. tagbot add wbbbb or tagbot add psssnnn
+        # Update logic where it ends the message if they didnt enter the correct add command.
+        print('Determining which tag to add between psn and wb...')
+        for platform, error_message in platforms.items():
+            if msg.startswith(f'tagbot add {platform}'):
+                print(f'{user_id} is trying to add {platform} tag...')
+                tag = msg[len(f'tagbot add {platform}'):].strip()
+                if not tag:
+                    print(f'{user_id} failed to add {platform} tag correctly')
+                    await ctx.send(error_message)
+                break
 
-        try:
-            redis_tag = self.redis_db.get(server_id,user_id)
-            print(redis_tag)
+                # Check if user_id exists already
+                    # If user_id exists
+                        # Check if psn or wb are empty
+                            # Use update_partial_item_in_collection
+                    # If user_id doesnt exist
+                        # Create user with add_item_in_collection
 
-            if not redis_tag:
-                print(f'{mention_user.id} or {mention_user} is not found in redis database going to couchbasedb')
-                # try:
-                #     couchbase_tag = self.couchbase_db.get(server_id,user_id)
+                try:
+                    print(f'Checking if {user_id} exists...')
+                    existing_user = self.couchbase_db.get_item_in_collection(
+                        collection_name='mortal_kombat_1',
+                        item_name=f'{user_id}'
+                    )
+                    print(f'Found {user_id} in database.')
 
+                    if platform not in existing_user.content_as[dict] or not existing_user.content_as[dict][platform]:
+                        print(f'{platform} tag is empty for {user_id}. Updating...')
+                        self.couchbase_db.update_item_in_collection(
+                            collection_name='mortal_kombat_1',
+                            item_name=f'{user_id}',
+                            item_key=platform,
+                            item_value=tag,
+                        )
+                        print(f'{platform} tag updated for user {user_id}')
+                        await ctx.send(f'{platform} tag updated for user {user_id} : {tag}')
+                    else:
+                        if existing_user.content_as[dict][platform] == tag:
+                            print(f'{platform} tag already exists for user {user_id} and is the same provided tag.')
+                            await ctx.send(f'{platform} tag already exists for user {user_id} and is the same provided tag. No update needed.')
+                        else:
+                            print(f'{platform} tag already exists for {user_id} but different from provided tag. Performing update')
+                            self.couchbase_db.update_item_in_collection(
+                                collection_name='mortal_kombat_1',
+                                item_name=f'{user_id}',
+                                item_key=platform,
+                                item_value=tag,
+                            )
+                            print(f'{platform} tag updated for user {user_id} : {tag}')
+                except Exception as e:
+                    if 'not found' in str(e).lower():
+                        print(f'User {user_id} not found in Couchbase DB. Creating new entry...')
+                        self.couchbase_db.add_item_in_collection(
+                            collection_name='mortal_kombat_1',
+                            item_name=f'{user_id}',
+                            item_key={platform: tag},
+                        )
+                        print(f'User {user_id} added to Couchbase DB with {platform} tag.')
+                        await ctx.send(f'{platform} tag added for user {user_id}')
+                    else:
+                        print(f'Error occured while adding {user_id}: {e}')
+                        await ctx.send(f'Error occured while adding you to tagbot. Please contact tagbot adminsitration thestrugglingblack@gmail.com')
 
             else:
-                print(f'{mention_user.id} is found in redis database no need to add to database.')
-                await ctx.send(f'Tagbot already have {mention_user} tag information it is {redis_tag}')
-        except Exception as e:
-            print(f'Failed to retrieve tags: {e}')
+                await ctx.send(
+                    'Please enter a valid tag. For example: tagbot add psn thestrugglingblack or tagbot add wb thestrugglingblack.')
+
 
 
 

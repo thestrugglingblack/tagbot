@@ -15,14 +15,7 @@
 Shape of the data.
 ```json
 "discord_username_id": {
-    "discord_username": "STRING",
-    "discords_server_list": [
-        {
-                "discord_id": "NUMBER",
-                "psn": "STRING",
-                "warnerbrothers":"STRING"
-                
-        }
-  ]
+  "psn":""
+  "wb": ""
 }
 ```
