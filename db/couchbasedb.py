@@ -28,29 +28,29 @@ class CouchbaseDB:
         self.collection_manager = self.bucket.collections()
 
         collection_name = 'mortal_kombat_1'
-        scope_name = '_default' # Potentially set scope to multiple environments dev|val|prod
+        self.scope_name = '_default' # Potentially set scope to multiple environments dev|val|prod
 
-        if scope_name != '_default':
+        if self.scope_name != '_default':
             try:
-                self.collection_manager.create_scope(scope_name)
-                print(f'Created scope {scope_name} successfully')
+                self.collection_manager.create_scope(self.scope_name)
+                print(f'Created scope {self.scope_name} successfully')
             except Exception as e:
                 if 'already exists' in str(e):
-                    print(f'Scope {scope_name} already exists')
+                    print(f'Scope {self.scope_name} already exists')
                 else:
-                    print(f'Failed to create scope {scope_name}')
+                    print(f'Failed to create scope {self.scope_name}')
                     return
 
 
         try:
             self.collection_manager.create_collection(
-                scope_name,
+                self.scope_name,
                 collection_name,
                 settings=CreateCollectionSettings()
             )
-            print(f'Created collection {collection_name} in scope {scope_name} successfully')
+            print(f'Created collection {collection_name} in scope {self.scope_name} successfully')
         except ScopeNotFoundException:
-            print(f'Failed to create scope {scope_name}')
+            print(f'Failed to create scope {self.scope_name}')
         except CollectionAlreadyExistsException:
             print(f'Collection {collection_name} already exists')
         except Exception as e:
@@ -60,8 +60,8 @@ class CouchbaseDB:
     def create_collection (self, collection_name):
         self.collection_manager.create_collection(collection_name)
 
-    def get_collection (self, scope_name, collection_name):
-        return self.bucket.scope(scope_name).collection(collection_name)
+    def get_collection (self, collection_name):
+        return self.bucket.scope(self.scope_name).collection(collection_name)
 
 
     def add_item_in_collection (self, collection_name, item_name, item_data):

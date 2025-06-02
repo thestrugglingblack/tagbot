@@ -19,3 +19,7 @@ Shape of the data.
   "wb": ""
 }
 ```
+
+### Additions
+* Add ratelimiting
+* Use logging tool

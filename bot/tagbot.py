@@ -7,6 +7,9 @@ from dotenv import load_dotenv
 
 from db.redisdb import RedisDB
 from db.couchbasedb import CouchbaseDB
+from couchbase.exceptions import (
+    DocumentNotFoundException
+)
 
 load_dotenv()
 
@@ -52,6 +55,8 @@ class TagBot(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
+        # if message.author.bot:
+        #     return
         print(f'Message from {message.author}: {message.content}')
 
     @commands.command(name='tag')
@@ -86,8 +91,12 @@ class TagBot(commands.Cog):
                     print(f'Tag cached in Redis for 30 minutes: {tag_data}')
 
                     await ctx.send(f'Here is {mention_user} tag information : {tag_data}')
+
+                except DocumentNotFoundException:
+                    await ctx.send(f'Looks like {user_id} is not within Tagbot. Add your tag! Example: tagbot tag @thestrugglingblack ')
                 except Exception as e:
                     print(f'Failed to retrieve tag from Couchbase DB: {e}')
+
             else:
                 print(f'Tag found in Redis: {redis_tag}')
                 await ctx.send(f'Tag found in Redis: {redis_tag}')
@@ -112,9 +121,20 @@ class TagBot(commands.Cog):
         # Update logic where it ends the message if they didnt enter the correct add command.
         print('Determining which tag to add between psn and wb...')
         for platform, error_message in platforms.items():
+            print('Checking which platform')
+            print(f'the platform: {platform}')
+            print(f'error msg: {error_message}')
+            print(platforms.items())
+            print(f'the message: {msg}')
+            print('the logic returns')
+            print(msg.startswith(f'tagbot add {platform}'))
+            print('the tag returns')
+            print(msg[len(f'tagbot add {platform}'):].strip())
+
             if msg.startswith(f'tagbot add {platform}'):
                 print(f'{user_id} is trying to add {platform} tag...')
                 tag = msg[len(f'tagbot add {platform}'):].strip()
+                print(f'Tag found is: {tag}')
                 if not tag:
                     print(f'{user_id} failed to add {platform} tag correctly')
                     await ctx.send(error_message)
@@ -128,6 +148,10 @@ class TagBot(commands.Cog):
                         # Create user with add_item_in_collection
 
                 try:
+                    if not self.couchbase_db:
+                        print('Couchbase DB is not initialized.')
+                        return
+
                     print(f'Checking if {user_id} exists...')
                     existing_user = self.couchbase_db.get_item_in_collection(
                         collection_name='mortal_kombat_1',
