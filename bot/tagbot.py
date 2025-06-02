@@ -84,10 +84,10 @@ class TagBot(commands.Cog):
                         collection_name='mortal_kombat_1',
                         item_name=f'{user_id}'
                     )
-                    tag_data = check_for_tag.content_as[str]
+                    tag_data = check_for_tag.content_as[dict]
                     print(f'Tag found in couchbase DB for {user_id}: {tag_data}')
 
-                    self.redis_db.set(server_id, user_id, tag_data, ex=1800)
+                    self.redis_db.set(server_id, user_id, tag_data, expiration=1800)
                     print(f'Tag cached in Redis for 30 minutes: {tag_data}')
 
                     await ctx.send(f'Here is {mention_user} tag information : {tag_data}')
