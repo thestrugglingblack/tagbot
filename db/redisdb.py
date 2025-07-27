@@ -1,4 +1,7 @@
 import redis
+from utils.logger import SimpleLogger
+
+logger = SimpleLogger("redisdb")
 
 class RedisDB:
     def __init__(self, host: str = "localhost", port: int = 6379, db: int = 0):

@@ -1,8 +1,8 @@
 from datetime import timedelta
 from couchbase.auth import PasswordAuthenticator
 from couchbase.cluster import Cluster
+from couchbase.subdocument import upsert
 from couchbase.management.collections import (
-    CollectionSpec,
     CreateCollectionSettings
 )
 from couchbase.options import (
@@ -13,6 +13,11 @@ from couchbase.exceptions import (
     CollectionAlreadyExistsException,
     ScopeNotFoundException,
 )
+
+
+from utils.logger import SimpleLogger
+
+logger = SimpleLogger("couchbasedb")
 
 
 class CouchbaseDB:
@@ -33,12 +38,15 @@ class CouchbaseDB:
         if self.scope_name != '_default':
             try:
                 self.collection_manager.create_scope(self.scope_name)
+                logger.info(f'COUCHBASE: {self.scope_name} scope created.')
                 print(f'Created scope {self.scope_name} successfully')
             except Exception as e:
                 if 'already exists' in str(e):
+                    logger.info(f'COUCHBASE: {self.scope_name} scope already exists..')
                     print(f'Scope {self.scope_name} already exists')
                 else:
                     print(f'Failed to create scope {self.scope_name}')
+                    logger.error(f'COUCHBASE: {self.scope_name} scope failed to create..')
                     return
 
 
@@ -83,15 +91,7 @@ class CouchbaseDB:
 
     def update_partial_item_in_collection (self, collection_name, item_name, item_key, item_data):
         collection = self.get_collection(collection_name)
-        collection.mutate_in(item_name,[subdocument.upsert(item_key, item_data)])
-
-    def remove_item_in_collection (self, collection_name, item_name):
-        collection = self.get_collection(collection_name)
-        collection.remove(item_name)
-
-    def remove_partial_item_in_collection (self, collection_name, item_name, item_key):
-        collection = self.get_collection(collection_name)
-        collection.mutate_in(item_name, [subdocument.remove(item_key)])
+        collection.mutate_in(item_name, [upsert(item_key, item_data)])
 
     def close(self):
         self.cluster.close()
