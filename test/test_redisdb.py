@@ -5,7 +5,7 @@ from db.redisdb import RedisDB
 
 @pytest.fixture
 def redis_db():
-    with patch('db.redisdb.redis.StrictRedis') as MockRedis:
+    with patch("db.redisdb.redis.StrictRedis") as MockRedis:
         mock_connection = MockRedis.return_value
         db = RedisDB(host="test_host", port=1234, db=0)
         db.connection = mock_connection
@@ -13,7 +13,7 @@ def redis_db():
 
 
 def test_init():
-    with patch('db.redisdb.redis.StrictRedis') as MockRedis:
+    with patch("db.redisdb.redis.StrictRedis") as MockRedis:
         db = RedisDB(host="test_host", port=1234, db=5)
         MockRedis.assert_called_once_with(
             host="test_host", port=1234, db=5, decode_responses=True
@@ -28,7 +28,7 @@ def test_set(redis_db):
 
     redis_db.set(server_id, user_id, tags, expiration)
 
-    expected_key = f'user:{server_id}:{user_id}:tags'
+    expected_key = f"user:{server_id}:{user_id}:tags"
     redis_db.connection.hmset.assert_called_once_with(expected_key, tags)
     redis_db.connection.expire.assert_called_once_with(expected_key, expiration)
 
@@ -41,7 +41,7 @@ def test_get(redis_db):
 
     result = redis_db.get(server_id, user_id)
 
-    expected_key = f'user:{user_id}:{server_id}:tags'
+    expected_key = f"user:{user_id}:{server_id}:tags"
     redis_db.connection.hgetall.assert_called_once_with(expected_key)
     assert result == expected_result
 

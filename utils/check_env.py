@@ -1,6 +1,7 @@
 import os
 from dotenv import dotenv_values
 
+
 def check_env():
     """
     Check if the required environment variables have been set.
@@ -11,7 +12,9 @@ def check_env():
 
     # Check if the .env file exists before anything else
     if not os.path.isfile(".env"):
-        raise FileNotFoundError(".env file is missing. Please create one in order to run the Roarwise application")
+        raise FileNotFoundError(
+            ".env file is missing. Please create one in order to run the Roarwise application"
+        )
 
     # Reads .env file for filled out values
     env_vars = dotenv_values(".env")

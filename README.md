@@ -79,10 +79,10 @@ Shape of the data.
   * test
   * deploy (COMPLETE 4 first)
 * Host on Azure (4)
-* Use logging tool (2)
-  * Hook up logfile to datadog or grafana
-* Add log to all files (1)
-  * print statements in tagbot.py
+~~* Use logging tool (2)
+  ~~* Hook up logfile to datadog or grafana~~~~
+* ~~Add log to all files (1)~~
+  * ~~print statements in tagbot.py~~
 * ~~Address TODOs~~
 * ~~Add tests~~
 * Add docs (5)

@@ -5,27 +5,27 @@ import pytest
 
 # Import ethe modules before my Couchbase class
 couchbase_mock = MagicMock()
-sys.modules['couchbase'] = couchbase_mock
-sys.modules['couchbase.auth'] = MagicMock()
-sys.modules['couchbase.options'] = MagicMock()
-sys.modules['couchbase.subdocument'] = MagicMock()
-sys.modules['couchbase.cluster'] = MagicMock()
-sys.modules['couchbase.management.collections'] = MagicMock()
-sys.modules['couchbase.exceptions'] = MagicMock()
+sys.modules["couchbase"] = couchbase_mock
+sys.modules["couchbase.auth"] = MagicMock()
+sys.modules["couchbase.options"] = MagicMock()
+sys.modules["couchbase.subdocument"] = MagicMock()
+sys.modules["couchbase.cluster"] = MagicMock()
+sys.modules["couchbase.management.collections"] = MagicMock()
+sys.modules["couchbase.exceptions"] = MagicMock()
 
 from db.couchbasedb import CouchbaseDB
 
 
 @pytest.fixture
 def couchbase_db():
-    with patch('db.couchbasedb.Cluster') as MockCluster:
+    with patch("db.couchbasedb.Cluster") as MockCluster:
         mock_cluster = MockCluster.return_value
         mock_bucket = mock_cluster.bucket.return_value
         mock_collection_manager = mock_bucket.collections.return_value
         mock_scope = mock_bucket.scope.return_value
         mock_collection = mock_scope.collection.return_value
 
-        db = CouchbaseDB('testuser', 'testpassword', 'testbucket')
+        db = CouchbaseDB("testuser", "testpassword", "testbucket")
         db.cluster = mock_cluster
         db.bucket = mock_bucket
         db.collection_manager = mock_collection_manager
@@ -34,8 +34,10 @@ def couchbase_db():
 
 def test_create_collection(couchbase_db):
     couchbase_db.collection_manager.create_collection = MagicMock()
-    couchbase_db.create_collection('testcollection')
-    couchbase_db.collection_manager.create_collection.assert_called_once_with('testcollection')
+    couchbase_db.create_collection("testcollection")
+    couchbase_db.collection_manager.create_collection.assert_called_once_with(
+        "testcollection"
+    )
 
 
 def test_get_collection(couchbase_db):
@@ -91,9 +93,11 @@ def test_update_partial_item_in_collection(couchbase_db):
     couchbase_db.get_collection = MagicMock(return_value=mock_collection)
 
     # Replace upsert function with my mock value
-    with patch('db.couchbasedb.upsert') as mock_upsert:
+    with patch("db.couchbasedb.upsert") as mock_upsert:
         mock_upsert.return_value = "upsert_spec"
-        couchbase_db.update_partial_item_in_collection(collection_name, item_name, item_key, item_data)
+        couchbase_db.update_partial_item_in_collection(
+            collection_name, item_name, item_key, item_data
+        )
 
         couchbase_db.get_collection.assert_called_once_with(collection_name)
         mock_upsert.assert_called_once_with(item_key, item_data)
@@ -107,21 +111,23 @@ def test_close(couchbase_db):
 
 
 def test_init_creates_scope_and_collection(couchbase_db):
-    with patch.dict('os.environ', {
-        'COUCHBASE_SCOPE': 'test_scope',
-        'COUCHBASE_COLLECTION': 'test_collection'
-    }):
-        with patch('db.couchbasedb.COUCHBASE_SCOPE', 'test_scope'):
-            with patch('db.couchbasedb.COUCHBASE_COLLECTION', 'test_collection'):
-                with patch('db.couchbasedb.Cluster') as MockCluster:
+    with patch.dict(
+        "os.environ",
+        {"COUCHBASE_SCOPE": "test_scope", "COUCHBASE_COLLECTION": "test_collection"},
+    ):
+        with patch("db.couchbasedb.COUCHBASE_SCOPE", "test_scope"):
+            with patch("db.couchbasedb.COUCHBASE_COLLECTION", "test_collection"):
+                with patch("db.couchbasedb.Cluster") as MockCluster:
                     mock_cluster = MockCluster.return_value
                     mock_bucket = mock_cluster.bucket.return_value
                     mock_collection_manager = mock_bucket.collections.return_value
 
-                    db = CouchbaseDB('testuser', 'testpassword', 'testbucket')
+                    db = CouchbaseDB("testuser", "testpassword", "testbucket")
 
-                    mock_collection_manager.create_scope.assert_called_once_with('test_scope')
+                    mock_collection_manager.create_scope.assert_called_once_with(
+                        "test_scope"
+                    )
 
                     mock_collection_manager.create_collection.assert_called_once_with(
-                        'test_scope', 'test_collection', settings=ANY
+                        "test_scope", "test_collection", settings=ANY
                     )

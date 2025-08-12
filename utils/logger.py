@@ -8,7 +8,9 @@ from typing import Union
 class SimpleLogger:
     LOG_FILE = None
 
-    def __init__(self, name: str, log_dir: str = "logs", level: Union[int, str] = logging.INFO) -> None:
+    def __init__(
+        self, name: str, log_dir: str = "logs", level: Union[int, str] = logging.INFO
+    ) -> None:
         self.logger = logging.getLogger(name)
         self.logger.setLevel(level)
 
@@ -18,9 +20,13 @@ class SimpleLogger:
         if SimpleLogger.LOG_FILE is None:
             SimpleLogger.LOG_FILE = os.path.join(log_dir, "tagbot-application.log")
 
-        file_handler = RotatingFileHandler(SimpleLogger.LOG_FILE, maxBytes=5 * 1024 * 1024, backupCount=5)
+        file_handler = RotatingFileHandler(
+            SimpleLogger.LOG_FILE, maxBytes=5 * 1024 * 1024, backupCount=5
+        )
         file_handler.setLevel(level)
-        file_handler.setFormatter(logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s"))
+        file_handler.setFormatter(
+            logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+        )
 
         if not any(isinstance(h, RotatingFileHandler) for h in self.logger.handlers):
             self.logger.addHandler(file_handler)

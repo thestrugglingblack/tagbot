@@ -6,3 +6,6 @@ test/__pycache__/
 bot/__pycache__/
 utils/__pycache__/
 logs/
+.coverage
+coverage.xml
+htmlcov/
