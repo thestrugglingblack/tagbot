@@ -4,7 +4,6 @@ from datetime import timedelta
 from typing import Optional, Dict
 from discord.ext import commands
 from discord import Embed
-from discord.ui import View, Button
 from dotenv import load_dotenv
 
 
@@ -67,7 +66,7 @@ class TagBot(commands.Cog):
     async def on_command_error(self, ctx, error):
         if isinstance(error, commands.CommandOnCooldown):
             seconds = round(error.retry_after)
-            logger.info(f'TAGBOT: {ctx.author.id} ratelimited')
+            logger.info(f'TAGBOT: {ctx.author.id} rate limited')
             await ctx.send(f'Please wait {seconds} seconds before using this command again.')
 
     def _cache_tag_in_redis(self, server_id:int, user_id: int, tag_data: Dict):

@@ -31,6 +31,12 @@
 
 
 ## 👋 Overview
+🎮 Tired of chasing down gamer tags before your match? Or waiting scrolling through your messages for your competitors tag?! Well meet Tagbot, your new Discord sidekick for online FGC tournaments.
+
+
+🔥 Meet Tagbot , your new Discord sidekick for online FGC tournaments.
+It grabs your opponent's tag instantly, so you can stop waiting and start playing.
+
 
 [![LinkedIn Badge](https://img.shields.io/badge/LinkedIn-0077B5?style=flat&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/zuri-hunter-748ba514)
 [![Twitter Badge](https://img.shields.io/badge/Twitter-1DA1F2?style=flat&logo=twitter&logoColor=white)](https://x.com/ZuriHunter)
@@ -66,11 +72,23 @@ Shape of the data.
 
 
 ### Additions
-* Add ratelimiting
-* CI/CD
-* Host on Azure
-* Use logging tool
-* Add log to all files
-* Address TODOs
-* Add tests
-* Add docs
+* ~~Add ratelimiting~~
+* CI/CD(3)
+  * lint
+  * docker
+  * test
+  * deploy (COMPLETE 4 first)
+* Host on Azure (4)
+* Use logging tool (2)
+  * Hook up logfile to datadog or grafana
+* Add log to all files (1)
+  * print statements in tagbot.py
+* ~~Address TODOs~~
+* ~~Add tests~~
+* Add docs (5)
+  * Add bot to top.gg (f)
+  * setup ways to add via invitation link (d)
+  * create static site for onboarding. (e)
+  * Update Contribute.MD (https://github.com/fuzzyprogrammer/mindPalace/wiki/CONTRIBUTE.md) (a)
+  * add format for bug report, pr template, feature request (b)
+  * add pydoc(c)

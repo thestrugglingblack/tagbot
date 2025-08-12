@@ -1,3 +1,5 @@
+import os
+from dotenv import load_dotenv
 from datetime import timedelta
 from couchbase.auth import PasswordAuthenticator
 from couchbase.cluster import Cluster
@@ -19,6 +21,9 @@ from utils.logger import SimpleLogger
 
 logger = SimpleLogger("couchbasedb")
 
+load_dotenv()
+COUCHBASE_SCOPE=os.getenv("COUCHBASE_SCOPE")
+COUCHBASE_COLLECTION=os.getenv("COUCHBASE_COLLECTION")
 
 class CouchbaseDB:
     def __init__(self, username, password, bucket_name, host="localhost"):
@@ -32,23 +37,18 @@ class CouchbaseDB:
         self.bucket = self.cluster.bucket(bucket_name)
         self.collection_manager = self.bucket.collections()
 
-        collection_name = 'mortal_kombat_1'
-        self.scope_name = '_default' # Potentially set scope to multiple environments dev|val|prod
+        collection_name = COUCHBASE_COLLECTION
+        self.scope_name = COUCHBASE_SCOPE
 
-        if self.scope_name != '_default':
-            try:
-                self.collection_manager.create_scope(self.scope_name)
-                logger.info(f'COUCHBASE: {self.scope_name} scope created.')
-                print(f'Created scope {self.scope_name} successfully')
-            except Exception as e:
-                if 'already exists' in str(e):
-                    logger.info(f'COUCHBASE: {self.scope_name} scope already exists..')
-                    print(f'Scope {self.scope_name} already exists')
-                else:
-                    print(f'Failed to create scope {self.scope_name}')
-                    logger.error(f'COUCHBASE: {self.scope_name} scope failed to create..')
-                    return
-
+        try:
+            self.collection_manager.create_scope(self.scope_name)
+            logger.info(f'COUCHBASE: {self.scope_name} scope created.')
+        except Exception as e:
+            if 'already exists' in str(e):
+                logger.info(f'COUCHBASE: {self.scope_name} scope already exists.')
+            else:
+                logger.error(f'COUCHBASE: {self.scope_name} scope failed to create.')
+                return
 
         try:
             self.collection_manager.create_collection(
@@ -56,43 +56,40 @@ class CouchbaseDB:
                 collection_name,
                 settings=CreateCollectionSettings()
             )
-            print(f'Created collection {collection_name} in scope {self.scope_name} successfully')
+            logger.info(f'COUCHBASE: Created collection called {collection_name} in {self.scope_name} scope.')
         except ScopeNotFoundException:
-            print(f'Failed to create scope {self.scope_name}')
+            logger.error(f'COUCHBASE: Failed to find scope {self.scope_name}.')
         except CollectionAlreadyExistsException:
-            print(f'Collection {collection_name} already exists')
+            logger.error(f'COUCHBASE: Collection {collection_name} already exists.')
         except Exception as e:
-            print(f'Failed to create collection {collection_name} due to {e}')
+            logger.error(f'COUCHBASE: Failed to create collection {collection_name} due to {e}')
 
 
     def create_collection (self, collection_name):
+        logger.info(f'COUCHBASE: Creating the collection {collection_name}.')
         self.collection_manager.create_collection(collection_name)
 
     def get_collection (self, collection_name):
+        logger.info(f'COUCHBASE: Retrieving the collection {collection_name}')
         return self.bucket.scope(self.scope_name).collection(collection_name)
-
 
     def add_item_in_collection (self, collection_name, item_name, item_data):
         collection = self.get_collection(collection_name)
+        logger.info(f'COUCHBASE: Adding an entry for {item_name} to collection {collection_name}.')
         collection.insert(item_name, item_data)
 
     def get_item_in_collection (self, collection_name, item_name):
         collection = self.get_collection(collection_name)
+        logger.info(f'COUCHBASE: Retrieving {item_name} from {collection_name} collection.')
         return collection.get(item_name)
-
-    def update_item_in_collection (self, collection_name, item_name, item_data):
-        collection = self.get_collection(collection_name)
-        collection.upsert(item_name, item_data)
-
-        # Doc NOT exist
-        # upsert
-        # Doc DO exist
-        # replace
 
     def update_partial_item_in_collection (self, collection_name, item_name, item_key, item_data):
         collection = self.get_collection(collection_name)
+        logger.info(f'COUCHBASE: Updating part of {item_name} in the {collection_name} collection.')
         collection.mutate_in(item_name, [upsert(item_key, item_data)])
 
     def close(self):
+        logger.info('COUCHBASE: Close cluster.')
         self.cluster.close()
+        logger.info('COUCHBASE: Close bucket...')
         self.bucket.close()

@@ -9,16 +9,15 @@ class RedisDB:
 
     def set(self, server_id: int, user_id:int, tags: dict, expiration):
         key = f'user:{server_id}:{user_id}:tags'
+        logger.info(f'REDIS: Adding {user_id} information.')
         self.connection.hmset(key, tags)
         self.connection.expire(key, expiration)
 
     def get(self, server_id: int, user_id: int):
         key = f'user:{user_id}:{server_id}:tags'
+        logger.info(f'REDIS: Retrieving {user_id} information.')
         return self.connection.hgetall(key)
 
-    def delete(self, server_id:int, user_id:int):
-        key = f'user:{user_id}:{server_id}:tags'
-        self.connection.delete(key)
-
     def close(self):
+        logger.info('REDIS: Closed connection.')
         self.connection.close()
