@@ -191,7 +191,6 @@ class TestTagBot:
                 result = tagbot._get_tag_from_couchbase(user_id)
                 assert result is None
 
-
     @pytest.mark.asyncio
     async def test_on_command_error_cooldown(self, tagbot, mock_ctx):
         error = commands.CommandOnCooldown(commands.BucketType.user, 5.5, 1)
