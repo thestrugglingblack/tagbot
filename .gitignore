@@ -9,3 +9,4 @@ logs/
 .coverage
 coverage.xml
 htmlcov/
+site/node_modules/
