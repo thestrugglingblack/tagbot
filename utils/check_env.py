@@ -4,10 +4,19 @@ from dotenv import dotenv_values
 
 def check_env():
     """
-    Check if the required environment variables have been set.
+    Check if the required environment variables have been set in the .env file.
+
+    This function verifies that:
+    1. The .env file exists in the current directory
+    2. All environment variables defined in the .env file have values
 
     Raises:
-        ValueError: If any of the required environment variables are missing or empty.
+        FileNotFoundError: If the .env file does not exist in the current directory.
+        ValueError: If any environment variables in the .env file are empty or not set.
+            The error message will list all missing variables.
+
+    Returns:
+        None: The function returns nothing if all checks pass.
     """
 
     # Check if the .env file exists before anything else
