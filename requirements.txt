@@ -2,5 +2,7 @@ discord.py
 redis
 couchbase
 pytest-asyncio
+pytest-cov
+pytest
 python-dotenv>=0.15.0,<1.0.0
 

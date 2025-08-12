@@ -74,9 +74,9 @@ Shape of the data.
 ### Additions
 * ~~Add ratelimiting~~
 * CI/CD(3)
-  * lint
+  ~~* lint~~
   * docker
-  * test
+  ~~* test~~
   * deploy (COMPLETE 4 first)
 * Host on Azure (4)
 ~~* Use logging tool (2)
