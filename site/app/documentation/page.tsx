@@ -106,6 +106,7 @@ export default function DocumentationPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                   <div className="bg-white p-4 rounded-lg border border-blue-200">
                     <h4 className="font-semibold text-blue-900 mb-2">Required Parameters</h4>
+                      {/* eslint-disable-next-line react/no-unescaped-entities */}
                     <p className="text-blue-700">Shown in quotes: "Platform Name"</p>
                   </div>
                   <div className="bg-white p-4 rounded-lg border border-blue-200">
@@ -115,7 +116,7 @@ export default function DocumentationPage() {
                 </div>
               </div>
 
-              {commands[activeCategory]?.map((cmd, index) => (
+              {commands[activeCategory as keyof typeof commands]?.map((cmd, index) => (
                 <div key={index} className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow">
                   <div className="flex items-start justify-between mb-4">
                     <div>
@@ -134,7 +135,7 @@ export default function DocumentationPage() {
                     </div>
                   </div>
 
-                  {cmd.options && (
+                  {'options' in cmd && cmd.options && (
                     <div>
                       <h4 className="font-medium text-gray-900 mb-2">Available Options:</h4>
                       <ul className="space-y-1 text-sm text-gray-600">

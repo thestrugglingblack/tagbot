@@ -11,6 +11,7 @@ coverage.xml
 htmlcov/
 site/node_modules/
 site/.next/
+site/out/
 
 # Terraform
 .terraform/

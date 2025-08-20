@@ -132,6 +132,7 @@ export default function SetupPage() {
                     <ol className="list-decimal list-inside space-y-2 text-gray-700">
                       <li>Select your Discord server from the dropdown</li>
                       <li>Review the requested permissions</li>
+                        {/* eslint-disable-next-line react/no-unescaped-entities */}
                       <li>Click "Authorize" to add the bot</li>
                       <li>Complete the captcha verification if prompted</li>
                     </ol>
@@ -205,6 +206,7 @@ export default function SetupPage() {
                     <div className="bg-gray-900 text-green-400 p-6 rounded-lg font-mono mb-4">
                       <p className="text-white">tagbot add psn saibotnoob</p>
                     </div>
+                      {/* eslint-disable-next-line react/no-unescaped-entities */}
                     <p className="text-gray-700">This adds "saibotnoob" as your gamer tag for PlayStation Network.</p>
                   </div>
 
