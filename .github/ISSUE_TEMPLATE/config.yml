@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: TagBot Support
+    url: https://tagbot.gg/bug-reports
+    about: Get help with TagBot on our website
+  - name: Twitter Support
+    url: https://www.x.com/ZuriHunter
+    about: Contact us on Twitter for urgent issues

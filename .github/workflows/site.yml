@@ -1,4 +1,4 @@
-name: Deploy tagbot.gg
+name: tagbot.gg
 
 on:
   push:

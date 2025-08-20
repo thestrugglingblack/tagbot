@@ -83,8 +83,8 @@ Shape of the data.
 * ~~Add tests~~
 * Add docs (5)
   * Add bot to top.gg (f)
-  * setup ways to add via invitation link (d)
-  * create static site for onboarding. (e)
-  * Update Contribute.MD (https://github.com/fuzzyprogrammer/mindPalace/wiki/CONTRIBUTE.md) (a)
-  * add format for bug report, pr template, feature request (b)
+  * ~~setup ways to add via invitation link (d)~~
+  * ~~create static site for onboarding. (e)~~
+  * ~~Update Contribute.MD (a)~~
+  * ~~add format for bug report, pr template, feature request (b)~~
   * add pydoc(c)
