@@ -10,6 +10,7 @@ logs/
 coverage.xml
 htmlcov/
 site/node_modules/
+site/.next/
 
 # Terraform
 .terraform/
