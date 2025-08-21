@@ -1,13 +1,28 @@
 import redis
+import os
+from dotenv import load_dotenv
+
 from utils.logger import SimpleLogger
 
 logger = SimpleLogger("redisdb")
+load_dotenv()
 
+REDIS_HOST = os.getenv("REDIS_HOST") or "localhost"
+REDIS_PORT = os.getenv("REDIS_PORT") or "6379"
+REDIS_PASSWORD = os.getenv("REDIS_PASSWORD")
+REDIS_SSL = os.getenv("REDIS_SSL", "true").lower() == "true"
 
 class RedisDB:
-    def __init__(self, host: str = "localhost", port: int = 6379, db: int = 0):
+    def __init__(self, db: int = 0):
+
         self.connection = redis.StrictRedis(
-            host=host, port=port, db=db, decode_responses=True
+            host=REDIS_HOST,
+            port=REDIS_PORT,
+            db=db,
+            decode_responses=True,
+            password=REDIS_PASSWORD,
+            ssl=REDIS_SSL,
+            ssl_cert_reqs=None,
         )
 
     def set(self, server_id: int, user_id: int, tags: dict, expiration):

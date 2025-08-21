@@ -22,14 +22,14 @@ logger = SimpleLogger("couchbasedb")
 load_dotenv()
 COUCHBASE_SCOPE = os.getenv("COUCHBASE_SCOPE")
 COUCHBASE_COLLECTION = os.getenv("COUCHBASE_COLLECTION")
-
+COUCHBASE_CONNECTION = os.getenv("COUCHBASE_CONNECTION") or "couchbase://localhost"
 
 class CouchbaseDB:
     def __init__(self, username, password, bucket_name, host="localhost"):
         self.bucket_name = bucket_name
         auth = PasswordAuthenticator(username, password)
         self.cluster = Cluster(
-            f"couchbase://{host}",
+            COUCHBASE_CONNECTION,
             ClusterOptions(
                 auth,
                 timeout_options=ClusterTimeoutOptions(kv_timeout=timedelta(seconds=5)),
@@ -49,7 +49,7 @@ class CouchbaseDB:
             if "already exists" in str(e):
                 logger.info(f"COUCHBASE: {self.scope_name} scope already exists.")
             else:
-                logger.error(f"COUCHBASE: {self.scope_name} scope failed to create.")
+                logger.warning(f"COUCHBASE: {self.scope_name} scope failed to create.")
                 return
 
         try:

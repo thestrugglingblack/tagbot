@@ -51,6 +51,7 @@ It grabs your opponent's tag instantly, so you can stop waiting and start playin
 * Redis DB
 * Python v3
 * Discord
+* Docker
 
 ## 🌵 File Structure
 
