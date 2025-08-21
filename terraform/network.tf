@@ -6,14 +6,6 @@ resource "azurerm_virtual_network" "tagbot" {
   resource_group_name = azurerm_resource_group.tagbot.name
 }
 
-# Internal Subnet for TagBot
-resource "azurerm_subnet" "tagbot" {
-  name                 = "internal"
-  resource_group_name  = azurerm_resource_group.tagbot.name
-  virtual_network_name = azurerm_virtual_network.tagbot.name
-  address_prefixes     = ["10.0.2.0/24"]
-}
-
 # Network Security Group for TagBot
 resource "azurerm_network_security_group" "tagbot" {
   name                = "tagbot-security-group"
@@ -51,3 +43,21 @@ resource "azurerm_subnet_network_security_group_association" "tagbot" {
   network_security_group_id = azurerm_network_security_group.tagbot.id
 }
 
+resource "azurerm_subnet" "tagbot" {
+  name                 = "internal-tagbot-subnet"
+  resource_group_name  = azurerm_resource_group.tagbot.name
+  virtual_network_name = azurerm_virtual_network.tagbot.name
+  address_prefixes     = ["10.0.2.0/24"]
+
+  # Add this delegation block for Container Instances
+  delegation {
+    name = "container-delegation"
+
+    service_delegation {
+      name    = "Microsoft.ContainerInstance/containerGroups"
+      actions = [
+        "Microsoft.Network/virtualNetworks/subnets/action",
+      ]
+    }
+  }
+}

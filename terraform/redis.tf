@@ -20,19 +20,19 @@ resource "azurerm_redis_cache" "tagbot" {
   }
 }
 
-resource "azurerm_private_endpoint" "redis" {
-  name                = "tagbot-redis-endpoint"
-  location            = azurerm_resource_group.tagbot.location
-  resource_group_name = azurerm_resource_group.tagbot.name
-  subnet_id           = azurerm_subnet.tagbot.id
-
-  private_service_connection {
-    name                           = "redis-connection"
-    private_connection_resource_id = azurerm_redis_cache.tagbot.id
-    is_manual_connection           = false
-    subresource_names              = ["redisCache"]
-  }
-}
+# resource "azurerm_private_endpoint" "redis" {
+#   name                = "tagbot-redis-endpoint"
+#   location            = azurerm_resource_group.tagbot.location
+#   resource_group_name = azurerm_resource_group.tagbot.name
+#   subnet_id           = azurerm_subnet.tagbot.id
+#
+#   private_service_connection {
+#     name                           = "redis-connection"
+#     private_connection_resource_id = azurerm_redis_cache.tagbot.id
+#     is_manual_connection           = false
+#     subresource_names              = ["redisCache"]
+#   }
+# }
 
 output "redis_connection_details" {
   value = {

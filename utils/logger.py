@@ -64,6 +64,19 @@ class SimpleLogger:
         if not any(isinstance(h, RotatingFileHandler) for h in self.logger.handlers):
             self.logger.addHandler(file_handler)
 
+        # Add console handler for Azure container logs
+        formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+        if not SimpleLogger._console_handler_added:
+            console_handler = logging.StreamHandler(sys.stdout)
+            console_handler.setLevel(level)
+            console_handler.setFormatter(formatter)
+
+            # Add to root logger so all SimpleLogger instances use it
+            root_logger = logging.getLogger()
+            if not any(isinstance(h, logging.StreamHandler) for h in root_logger.handlers):
+                root_logger.addHandler(console_handler)
+                SimpleLogger._console_handler_added = True
+
     def debug(self, message: str) -> None:
         """
         Log a message at DEBUG level.

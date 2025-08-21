@@ -22,7 +22,7 @@ def check_env():
     # Check if the .env file exists before anything else
     if not os.path.isfile(".env"):
         raise FileNotFoundError(
-            ".env file is missing. Please create one in order to run the Roarwise application"
+            ".env file is missing. Please create one in order to run the TagBot Discord Bot"
         )
 
     # Reads .env file for filled out values

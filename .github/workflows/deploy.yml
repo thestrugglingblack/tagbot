@@ -1,0 +1,58 @@
+name: Deploy TagBot
+
+on:
+  workflow_run:
+    workflows: ["Build + Push Docker"]
+    types:
+      - completed
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.5.0
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Update Discord Bot Image
+        run: |
+          # Update the image tag in terraform.tfvars
+          sed -i 's|discord_bot_image.*=.*|discord_bot_image = "ghcr.io/thestrugglingblack/tagbot:latest"|' terraform.tfvars
+
+      - name: Terraform Plan
+        run: terraform plan -target=azurerm_container_group.tagbot_discord
+
+      - name: Terraform Apply
+        run: terraform apply -target=azurerm_container_group.tagbot_discord -auto-approve
+
+      - name: Check Deployment Status
+        run: |
+          echo "Checking container status..."
+          az container show \
+            --resource-group tagbot-resources \
+            --name tagbot-discord-bot \
+            --query 'containers[0].instanceView.currentState' \
+            --output table
+
+      - name: Get Container Logs
+        if: always()
+        run: |
+          echo "Getting container logs..."
+          az container logs \
+            --resource-group tagbot-resources \
+            --name tagbot-discord-bot \
+            --tail 50

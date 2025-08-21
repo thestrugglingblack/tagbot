@@ -27,6 +27,13 @@ logger.info(
 )
 
 # Preliminary check before running application
+
+if os.path.exists('.env'):
+    load_dotenv()
+    logger.info("Loaded .env file for local development")
+else:
+    logger.info("No .env file found, using environment variables (container mode)")
+
 try:
     check_env()
 except FileNotFoundError as e:

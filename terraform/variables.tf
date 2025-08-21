@@ -1,60 +1,8 @@
-# Couchbase Configuration
-variable "couchbase_vm_size" {
-  description = "Size of the Couchbase VM"
-  type        = string
-  default     = "Standard_D2s_v3"  # Better for Couchbase workloads
-}
-
-variable "couchbase_admin_username" {
-  description = "Admin username for Couchbase VM"
-  type        = string
-  default     = "adminuser"
-}
-
-variable "couchbase_admin_password" {
-  description = "Admin password for Couchbase cluster"
-  type        = string
-  sensitive   = true
-  default     = "passwordpassword"
-}
-
-variable "couchbase_cluster_name" {
-  description = "Name of the Couchbase cluster"
-  type        = string
-  default     = "tagbot-cluster"
-}
-
 variable "ssh_public_key_path" {
   description = "Path to SSH public key file"
   type        = string
   default     = "~/.ssh/id_rsa.pub"
 }
-
-
-# # Security Configuration
-# variable "allowed_source_addresses" {
-#   description = "Allowed source address prefixes for network security rules"
-#   type        = list(string)
-#   default     = ["10.0.2.0/24"]
-# }
-#
-# variable "couchbase_admin_ports" {
-#   description = "Couchbase admin port ranges"
-#   type        = list(string)
-#   default     = ["8091-8096"]
-# }
-
-# variable "couchbase_ssl_ports" {
-#   description = "Couchbase SSL port ranges"
-#   type        = list(string)
-#   default     = ["18091-18096"]
-# }
-#
-# variable "couchbase_data_port" {
-#   description = "Couchbase data port"
-#   type        = string
-#   default     = "11210"
-# }
 
 variable "redis_ssl_port" {
   description = "Redis SSL port"
@@ -75,4 +23,65 @@ variable "common_tags" {
     Environment = "Production"
     Project     = "TagBot"
   }
+}
+
+# Discord Bot Configuration Variables
+
+variable "discord_bot_image" {
+  description = "Docker image for Discord bot"
+  type        = string
+  default     = "ghcr.io/thestrugglingblack/tagbot:latest"
+}
+
+variable "discord_token" {
+  description = "Discord bot token"
+  type        = string
+  sensitive   = true
+}
+
+variable "discord_application_id" {
+  description = "Discord application ID"
+  type        = string
+}
+
+variable "discord_public_id" {
+  description = "Discord public ID"
+  type        = string
+}
+
+variable "couchbase_bucket_name" {
+  description = "Couchbase bucket name"
+  type        = string
+}
+
+variable "couchbase_collection" {
+  description = "Couchbase collection name"
+  type        = string
+}
+
+variable "couchbase_scope" {
+  description = "Couchbase scope name"
+  type        = string
+}
+
+variable "tag_expiration" {
+  description = "Tag expiration time in seconds"
+  type        = string
+  default     = "3600"
+}
+
+variable "couchbase_connection_string" {
+  description = "Couchbase connection string"
+  type        = string
+}
+
+variable "couchbase_admin_username" {
+  description = "Admin username for Couchbase"
+  type        = string
+}
+
+variable "couchbase_admin_password" {
+  description = "Admin password for Couchbase"
+  type        = string
+  sensitive   = true
 }
