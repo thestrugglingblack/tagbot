@@ -13,11 +13,13 @@ def redis_db():
 
 
 def test_init():
-    with patch("db.redisdb.redis.StrictRedis") as MockRedis, \
-         patch("db.redisdb.SimpleLogger"):
+    with patch("db.redisdb.redis.StrictRedis") as MockRedis, patch(
+        "db.redisdb.SimpleLogger"
+    ):
         db = RedisDB()
         MockRedis.assert_called_once()
         assert db.connection == MockRedis.return_value
+
 
 def test_set(redis_db):
     server_id = 123
