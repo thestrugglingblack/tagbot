@@ -1,30 +1,91 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
-
-## Getting Started
-
-First, run the development server:
-
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+                                             
+               ▗▖                            
+ ▐▌            ▐▌         ▐▌                 
+▐███  ▟██▖ ▟█▟▌▐▙█▙  ▟█▙ ▐███       ▟█▟▌ ▟█▟▌
+ ▐▌   ▘▄▟▌▐▛ ▜▌▐▛ ▜▌▐▛ ▜▌ ▐▌       ▐▛ ▜▌▐▛ ▜▌
+ ▐▌  ▗█▀▜▌▐▌ ▐▌▐▌ ▐▌▐▌ ▐▌ ▐▌       ▐▌ ▐▌▐▌ ▐▌
+ ▐▙▄ ▐▙▄█▌▝█▄█▌▐█▄█▘▝█▄█▘ ▐▙▄   █  ▝█▄█▌▝█▄█▌
+  ▀▀  ▀▀▝▘ ▞▀▐▌▝▘▀▘  ▝▀▘   ▀▀   ▀   ▞▀▐▌ ▞▀▐▌
+           ▜█▛▘                     ▜█▛▘ ▜█▛▘
+                                             
+```
+## Table of Contents
+* [Prerequisites](#prerequisites)
+* [File Structure](#file-structure)
+* [Getting Started](#getting-started)
+* [CICD](#cicd)
+* [Contribution](#contribution)
+
+## Prerequisites
+* Node.js v20
+* Next.js
+
+## File Structure
+```bash
+├── README.md
+├── app
+│   ├── bug-reports
+│   ├── documentation
+│   ├── faq-organizers
+│   ├── faq-users
+│   ├── feature-requests
+│   ├── globals.css
+│   ├── layout.tsx
+│   ├── not-found.tsx
+│   ├── page.tsx
+│   └── setup
+├── components
+│   ├── CTA.tsx
+│   ├── FAQ.tsx
+│   ├── Footer.tsx
+│   ├── Header.tsx
+│   ├── Hero.tsx
+│   └── HowItWorks.tsx
+├── eslint.config.mjs
+├── next-env.d.ts
+├── next.config.ts
+├── package-lock.json
+├── package.json
+├── postcss.config.mjs
+├── public
+│   └── assets
+├── tailwind.config.js
+└── tsconfig.json
+```
+## Getting Started
+Install all library/project dependencies.
+```bash
+nvm use
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+To start the development server.
+```bash
+npm run dev
+```
+Go to http://localhost:3000 to view site changes.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+To run eslint.
+```bash
+npm run lint
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+To create production files of the application.
+```
+npm run build
+```
+The files will be located in the `/out` directory.
 
-## Learn More
+For any image optimization run the following:
+```bash
+imagemin assets/*.jpg --out-dir=assets/optimized --plugin=mozjpeg --plugin.mozjpeg.quality=80
+```
+All the newly generated images are placed in `public/assets/optimized` directory.
 
-To learn more about Next.js, take a look at the following resources:
+## CICD
+Using GitHub Actions its process is triggered under two conditions:
+* There is an update to the `main` branch.
+* There were changes modified in the `/site` directory.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+The pipeline lints the project, builds the production files and deploys it to Azure Static Web Apps. 

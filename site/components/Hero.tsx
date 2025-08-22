@@ -6,11 +6,8 @@ export default function Hero() {
   return (
     <section 
       className="relative min-h-screen flex items-center justify-center bg-cover bg-center bg-no-repeat"
-      // style={{
-      //   backgroundImage: `linear-gradient(rgba(59, 130, 246, 0.8), rgba(99, 102, 241, 0.8)), url('https://readdy.ai/api/search-image?query=professional%20esports%20gaming%20tournament%20arena%20with%20modern%20gaming%20setup%2C%20competitive%20environment%2C%20neon%20lights%2C%20futuristic%20design%2C%20tournament%20brackets%20display%20screens%2C%20gaming%20chairs%20and%20desks%2C%20purple%20and%20blue%20color%20scheme%2C%20high-tech%20atmosphere&width=1920&height=1080&seq=hero1&orientation=landscape')`
-      // }}
       style={{
-        backgroundImage: `linear-gradient(rgba(59, 130, 246, 0.8), rgba(99, 102, 241, 0.8)), url('../assets/0J3A1445-cb.jpg')`
+        backgroundImage: `linear-gradient(rgba(59, 130, 246, 0.8), rgba(99, 102, 241, 0.8)), url('../assets/optimized/0J3A1445-cb.jpg')`
       }}
     >
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">

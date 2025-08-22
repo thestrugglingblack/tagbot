@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
+import Image from 'next/image'
+
 
 export default function BugReportsPage() {
   const [reportType, setReportType] = useState('bug');
@@ -20,11 +22,14 @@ export default function BugReportsPage() {
       <Header />
       
       <div className="relative bg-gradient-to-r from-red-600 to-orange-600 py-20">
-        <div className="absolute inset-0 bg-cover bg-center opacity-20" 
-             style={{
-               backgroundImage: `url('../assets/0J3A1076-cb.jpg')`
-             }}>
-        </div>
+          <Image
+            src="/assets/optimized/0J3A1076-cb.jpg"
+            fill
+            className="object-cover opacity-20"
+            priority={true}
+            quality={80}
+            sizes="100vw"
+          />
         <div className="relative max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
           <h1 className="text-5xl md:text-6xl font-bold text-white mb-6">
             Bug Reports
