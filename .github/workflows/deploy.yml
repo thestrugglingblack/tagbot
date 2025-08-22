@@ -56,10 +56,10 @@ jobs:
         run: terraform init
 
       - name: Terraform Plan
-        run: terraform plan -target=azurerm_container_group.tagbot_discord
+        run: terraform plan
 
       - name: Terraform Apply
-        run: terraform apply -target=azurerm_container_group.tagbot_discord -auto-approve
+        run: terraform apply -auto-approve
 
       - name: Check Deployment Status
         run: |
