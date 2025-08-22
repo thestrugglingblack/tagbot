@@ -3,9 +3,11 @@ name: tagbot.gg
 on:
   push:
     branches: [ "main" ]
+    paths: ["site/**"]
   pull_request:
     types: [opened, synchronize, reopened, closed]
     branches: [ "main" ]
+    paths: ["site/**"]
 
 permissions:
   contents: read
