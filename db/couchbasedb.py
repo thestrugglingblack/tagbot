@@ -26,7 +26,7 @@ COUCHBASE_CONNECTION = os.getenv("COUCHBASE_CONNECTION") or "couchbase://localho
 
 
 class CouchbaseDB:
-    def __init__(self, username, password, bucket_name, host="localhost"):
+    def __init__(self, username, password, bucket_name):
         self.bucket_name = bucket_name
         auth = PasswordAuthenticator(username, password)
         self.cluster = Cluster(
@@ -51,7 +51,6 @@ class CouchbaseDB:
                 logger.info(f"COUCHBASE: {self.scope_name} scope already exists.")
             else:
                 logger.warning(f"COUCHBASE: {self.scope_name} scope failed to create.")
-                return
 
         try:
             self.collection_manager.create_collection(
