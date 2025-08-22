@@ -10,7 +10,7 @@ terraform {
 provider "azurerm" {
   features {}
   resource_provider_registrations = "none"
-  use_cli = true
+  # use_cli = true
 }
 
 resource "azurerm_resource_group" "tagbot" {
