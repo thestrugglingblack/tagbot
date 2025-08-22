@@ -23,6 +23,7 @@ export default function BugReportsPage() {
       
       <div className="relative bg-gradient-to-r from-red-600 to-orange-600 py-20">
           <Image
+              alt="Image of commentators from ComboBreaker 2025"
             src="/assets/optimized/0J3A1076-cb.jpg"
             fill
             className="object-cover opacity-20"
