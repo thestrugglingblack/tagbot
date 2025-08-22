@@ -28,6 +28,27 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
+      - name: Create terraform.tfvars
+        run: |
+          cat > terraform.tfvars << EOF
+          # Discord Bot Configuration
+          discord_bot_image        = "ghcr.io/thestrugglingblack/tagbot:latest"
+          discord_token           = "${{ secrets.DISCORD_TOKEN }}"
+          discord_application_id  = "${{ secrets.DISCORD_APPLICATION_ID }}"
+          discord_public_id       = "${{ secrets.DISCORD_PUBLIC_ID }}"
+          
+          couchbase_admin_username = ${{secrets.COUCHBASE_USERNAME}}
+          couchbase_admin_password = "${{ secrets.COUCHBASE_PASSWORD }}"
+          couchbase_bucket_name   = ${{ secrets.COUCHBASE_BUCKET_NAME }}
+          couchbase_collection    = ${{ secrets.COUCHBASE_COLLECTION }}
+          couchbase_scope         = ${{ secrets.COUCHBASE_SCOPE }}
+          tag_expiration         = "3600"
+          couchbase_connection_string = ${{secrets.COUCHBASE_CONNECTION}}
+          
+          echo "Created terraform.tfvars with contents:"
+          # Show file without sensitive values
+          grep -v "token\|password" terraform.tfvars
+
       - name: Terraform Init
         run: terraform init
 
