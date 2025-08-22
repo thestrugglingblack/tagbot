@@ -4,22 +4,20 @@ from db.redisdb import RedisDB
 
 
 @pytest.fixture
-@patch("db.redisdb.SimpleLogger")
 def redis_db():
     with patch("db.redisdb.redis.StrictRedis") as MockRedis:
         mock_connection = MockRedis.return_value
-        db = RedisDB(host="test_host", port=1234, db=0)
+        db = RedisDB()
         db.connection = mock_connection
         yield db
 
 
 def test_init():
-    with patch("db.redisdb.redis.StrictRedis") as MockRedis:
-        db = RedisDB(host="test_host", port=1234, db=5)
-        MockRedis.assert_called_once_with(
-            host="test_host", port=1234, db=5, decode_responses=True
-        )
-
+    with patch("db.redisdb.redis.StrictRedis") as MockRedis, \
+         patch("db.redisdb.SimpleLogger"):
+        db = RedisDB()
+        MockRedis.assert_called_once()
+        assert db.connection == MockRedis.return_value
 
 def test_set(redis_db):
     server_id = 123

@@ -30,6 +30,7 @@ class SimpleLogger:
     """
 
     LOG_FILE = None
+    _console_handler_added = False
 
     def __init__(
         self, name: str, log_dir: str = "logs", level: Union[int, str] = logging.INFO
