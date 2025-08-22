@@ -23,4 +23,7 @@ output "tagbot_subnet_id" {
   value = azurerm_subnet.tagbot.id
 }
 
-
+output "nat_gateway_public_ip" {
+  description = "Public IP address of the NAT Gateway"
+  value       = azurerm_public_ip.nat_gateway.ip_address
+}
