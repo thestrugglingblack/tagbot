@@ -30,7 +30,7 @@ jobs:
 
       - name: Create terraform.tfvars
         run: |
-          cat > terraform.tfvars << EOF
+          cat > terraform.tfvars << 'EOF'
           # Discord Bot Configuration
           discord_bot_image        = "ghcr.io/thestrugglingblack/tagbot:latest"
           discord_token           = "${{ secrets.DISCORD_TOKEN }}"
@@ -45,9 +45,8 @@ jobs:
           tag_expiration         = "3600"
           couchbase_connection_string = ${{secrets.COUCHBASE_CONNECTION}}
           
-          echo "Created terraform.tfvars with contents:"
-          # Show file without sensitive values
-          grep -v "token\|password" terraform.tfvars
+          echo "Created terraform.tfvars successfully"
+          echo "File size: $(wc -l < terraform.tfvars) lines"
 
       - name: Terraform Init
         run: terraform init
