@@ -11,6 +11,9 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    defaults:
+      run:
+        working-directory: terraform
 
     steps:
       - uses: actions/checkout@v3
