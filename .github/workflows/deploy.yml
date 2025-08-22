@@ -30,31 +30,23 @@ jobs:
 
       - name: Create terraform.tfvars
         run: |
-          cat > terraform.tfvars << 'EOF'
-          # Discord Bot Configuration
-          discord_bot_image        = "ghcr.io/thestrugglingblack/tagbot:latest"
-          discord_token           = "${{ secrets.DISCORD_TOKEN }}"
-          discord_application_id  = "${{ secrets.DISCORD_APPLICATION_ID }}"
-          discord_public_id       = "${{ secrets.DISCORD_PUBLIC_ID }}"
+          echo 'discord_bot_image = "ghcr.io/thestrugglingblack/tagbot:latest"' > terraform.tfvars
+          echo 'discord_token = "${{ secrets.DISCORD_TOKEN }}"' >> terraform.tfvars
+          echo 'discord_application_id = "${{ secrets.DISCORD_APPLICATION_ID }}"' >> terraform.tfvars
+          echo 'discord_public_id = "${{ secrets.DISCORD_PUBLIC_ID }}"' >> terraform.tfvars
+          echo 'couchbase_admin_username = "${{ secrets.COUCHBASE_USERNAME }}"' >> terraform.tfvars
+          echo 'couchbase_admin_password = "${{ secrets.COUCHBASE_PASSWORD }}"' >> terraform.tfvars
+          echo 'couchbase_bucket_name = "${{ secrets.COUCHBASE_BUCKET_NAME }}"' >> terraform.tfvars
+          echo 'couchbase_collection = "${{ secrets.COUCHBASE_COLLECTION }}"' >> terraform.tfvars
+          echo 'couchbase_scope = "${{ secrets.COUCHBASE_SCOPE }}"' >> terraform.tfvars
+          echo 'tag_expiration = "3600"' >> terraform.tfvars
+          echo 'couchbase_connection_string = "${{ secrets.COUCHBASE_CONNECTION }}"' >> terraform.tfvars
           
-          couchbase_admin_username = ${{secrets.COUCHBASE_USERNAME}}
-          couchbase_admin_password = "${{ secrets.COUCHBASE_PASSWORD }}"
-          couchbase_bucket_name   = ${{ secrets.COUCHBASE_BUCKET_NAME }}
-          couchbase_collection    = ${{ secrets.COUCHBASE_COLLECTION }}
-          couchbase_scope         = ${{ secrets.COUCHBASE_SCOPE }}
-          tag_expiration         = "3600"
-          couchbase_connection_string = ${{secrets.COUCHBASE_CONNECTION}}
-          
-          echo "Created terraform.tfvars successfully"
-          echo "File size: $(wc -l < terraform.tfvars) lines"
+          echo "terraform.tfvars created successfully"
+          echo "File contains $(wc -l < terraform.tfvars) lines"
 
       - name: Terraform Init
         run: terraform init
-
-      - name: Update Discord Bot Image
-        run: |
-          # Update the image tag in terraform.tfvars
-          sed -i 's|discord_bot_image.*=.*|discord_bot_image = "ghcr.io/thestrugglingblack/tagbot:latest"|' terraform.tfvars
 
       - name: Terraform Plan
         run: terraform plan -target=azurerm_container_group.tagbot_discord
