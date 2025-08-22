@@ -83,12 +83,9 @@ jobs:
             --name tagbot-discord-bot \
             --query 'containers[0].instanceView.currentState' \
             --output table
-
       - name: Get Container Logs
-        if: always()
         run: |
           echo "Getting container logs..."
           az container logs \
             --resource-group tagbot-resources \
-            --name tagbot-discord-bot \
-            --tail 50
+            --name tagbot-discord-bot
