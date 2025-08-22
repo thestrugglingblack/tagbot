@@ -2,7 +2,7 @@ name: Deploy TagBot
 
 on:
   workflow_run:
-    workflows: ["Build + Push Docker"]
+    workflows: ["Docker"]
     types:
       - completed
     branches: [ main ]

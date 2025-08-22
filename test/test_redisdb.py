@@ -4,7 +4,7 @@ from db.redisdb import RedisDB
 
 
 @pytest.fixture
-@patch('db.redisdb.SimpleLogger')
+@patch("db.redisdb.SimpleLogger")
 def redis_db():
     with patch("db.redisdb.redis.StrictRedis") as MockRedis:
         mock_connection = MockRedis.return_value
