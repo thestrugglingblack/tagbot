@@ -28,7 +28,7 @@ logger.info(
 
 # Preliminary check before running application
 
-if os.path.exists('.env'):
+if os.path.exists(".env"):
     load_dotenv()
     logger.info("Loaded .env file for local development")
 else:

@@ -12,6 +12,7 @@ REDIS_PORT = os.getenv("REDIS_PORT") or "6379"
 REDIS_PASSWORD = os.getenv("REDIS_PASSWORD")
 REDIS_SSL = os.getenv("REDIS_SSL", "true").lower() == "true"
 
+
 class RedisDB:
     def __init__(self, db: int = 0):
 

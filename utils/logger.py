@@ -8,6 +8,7 @@ Classes:
     SimpleLogger: A wrapper class for the standard Python logging module that simplifies
                  configuration and usage.
 """
+
 import logging
 import os
 import sys
@@ -27,6 +28,7 @@ class SimpleLogger:
         LOG_FILE (str): Class-level attribute storing the path to the log file.
         logger (logging.Logger): The underlying logger instance.
     """
+
     LOG_FILE = None
 
     def __init__(
@@ -65,7 +67,9 @@ class SimpleLogger:
             self.logger.addHandler(file_handler)
 
         # Add console handler for Azure container logs
-        formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+        formatter = logging.Formatter(
+            "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+        )
         if not SimpleLogger._console_handler_added:
             console_handler = logging.StreamHandler(sys.stdout)
             console_handler.setLevel(level)
@@ -73,7 +77,9 @@ class SimpleLogger:
 
             # Add to root logger so all SimpleLogger instances use it
             root_logger = logging.getLogger()
-            if not any(isinstance(h, logging.StreamHandler) for h in root_logger.handlers):
+            if not any(
+                isinstance(h, logging.StreamHandler) for h in root_logger.handlers
+            ):
                 root_logger.addHandler(console_handler)
                 SimpleLogger._console_handler_added = True
 
@@ -118,15 +124,15 @@ class SimpleLogger:
 
     def error(self, message: str) -> None:
         """
-         Log a message at ERROR level.
+        Log a message at ERROR level.
 
-         Args:
-             message (str): The message to log.
+        Args:
+            message (str): The message to log.
 
-         Example:
-             >>> logger = SimpleLogger("my_module")
-             >>> logger.error("Failed to connect to database")
-         """
+        Example:
+            >>> logger = SimpleLogger("my_module")
+            >>> logger.error("Failed to connect to database")
+        """
         self.logger.error(message)
 
     def critical(self, message: str) -> None:

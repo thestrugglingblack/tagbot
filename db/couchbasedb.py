@@ -24,6 +24,7 @@ COUCHBASE_SCOPE = os.getenv("COUCHBASE_SCOPE")
 COUCHBASE_COLLECTION = os.getenv("COUCHBASE_COLLECTION")
 COUCHBASE_CONNECTION = os.getenv("COUCHBASE_CONNECTION") or "couchbase://localhost"
 
+
 class CouchbaseDB:
     def __init__(self, username, password, bucket_name, host="localhost"):
         self.bucket_name = bucket_name
