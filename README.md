@@ -68,7 +68,21 @@ Shape of the data.
   "wb": ""
 }
 ```
-
+## Deploy
+Had to create this first and this is to store my tfstate for CICD
+```
+az storage account create \
+  --name tagbottfstate \
+  --resource-group tagbot-resources \
+  --location "East US" \
+  --sku Standard_LRS \
+  --kind StorageV2
+  
+  
+az storage container create \
+  --name tfstate \
+  --account-name tagbottfstate
+```
 ## 🤝 Contribute
 
 

@@ -5,6 +5,14 @@ terraform {
       version = "~>4.39.0" # or your pinned version
     }
   }
+
+  # Add my terraform state file
+  backend "azurerm" {
+    resource_group_name  = "tagbot-resources"
+    storage_account_name = "tagbottfstate"
+    container_name       = "tfstate"
+    key                  = "terraform.tfstate"
+  }
 }
 
 provider "azurerm" {

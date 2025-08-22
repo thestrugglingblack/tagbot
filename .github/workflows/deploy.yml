@@ -55,13 +55,6 @@ jobs:
       - name: Terraform Init
         run: terraform init
 
-      - name: Import Existing Resources
-        run: |
-          # Extract subscription ID from AZURE_CREDENTIALS secret
-          SUBSCRIPTION_ID=$(echo '${{ secrets.AZURE_CREDENTIALS }}' | jq -r '.subscriptionId')
-          terraform import azurerm_resource_group.tagbot "/subscriptions/${SUBSCRIPTION_ID}/resourceGroups/tagbot-resources" || echo "Resource group already in state or doesn't exist"
-        
-
       - name: Terraform Plan
         run: terraform plan
 
