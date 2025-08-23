@@ -18,6 +18,11 @@ const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
   setErrorMessage('');
 
+  // Debug: Check if token exists
+  console.log('Token exists:', !!process.env.NEXT_PUBLIC_GITHUB_TOKEN);
+  console.log('Token length:', process.env.NEXT_PUBLIC_GITHUB_TOKEN?.length || 0);
+
+
   try {
     const formData = new FormData(e.target as HTMLFormElement);
 
