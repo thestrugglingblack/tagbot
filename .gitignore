@@ -12,6 +12,7 @@ htmlcov/
 site/node_modules/
 site/.next/
 site/out/
+site/.env.local
 
 # Terraform
 .terraform/

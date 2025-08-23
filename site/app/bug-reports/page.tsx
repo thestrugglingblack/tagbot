@@ -10,11 +10,41 @@ export default function BugReportsPage() {
   const [reportType, setReportType] = useState('bug');
   const [severity, setSeverity] = useState('medium');
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('')
 
-  const handleSubmit = (e: React.FormEvent) => {
+      const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitted(true);
-    setTimeout(() => setIsSubmitted(false), 3000);
+    setErrorMessage('');
+
+    try {
+      const formData = new FormData(e.target as HTMLFormElement);
+
+      const response = await fetch('/api/bug-report', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (response.ok) {
+        setIsSubmitted(true);
+        setTimeout(() => setIsSubmitted(false), 3000);
+        // Reset form
+        (e.target as HTMLFormElement).reset();
+        setReportType('bug');
+        setSeverity('medium');
+      } else {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || `Server error: ${response.status}`);
+      }
+    } catch (error) {
+      console.error('Error submitting bug report:', error);
+      if (error instanceof TypeError && error.message.includes('fetch')) {
+        setErrorMessage('Network error. Please check your connection and try again.');
+      } else if (error instanceof Error) {
+        setErrorMessage(error.message);
+      } else {
+        setErrorMessage('Something went wrong. Please try again later.');
+      }
+    }
   };
 
   return (
@@ -52,6 +82,15 @@ export default function BugReportsPage() {
                   <div className="flex items-center space-x-3">
                     <i className="ri-check-circle-line text-green-600 text-xl"></i>
                     <p className="text-green-800 font-medium">Bug report submitted successfully! We\ll investigate this issue.</p>
+                  </div>
+                </div>
+              )}
+
+              {errorMessage && (
+                <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+                  <div className="flex items-center space-x-3">
+                    <i className="ri-error-warning-line text-red-600 text-xl"></i>
+                    <p className="text-red-800 font-medium">{errorMessage}</p>
                   </div>
                 </div>
               )}

@@ -37,7 +37,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial release of TagBot
 - Core Discord bot functionality for storing gamer tag information
-- Basic tournament support features
+- Basic tag support features
 - Website deployment at tagbot.gg
 - Database layer implementation
 - Basic utility functions

@@ -11,17 +11,16 @@
                                              
 ```
 ## Table of Contents
-* [Prerequisites](#prerequisites)
-* [File Structure](#file-structure)
-* [Getting Started](#getting-started)
-* [CICD](#cicd)
-* [Contribution](#contribution)
+* [✅ Prerequisites](#prerequisites)
+* [🗄️ File Structure](#file-structure)
+* [🏃 Getting Started](#getting-started)
+* [🛠️ CICD](#cicd)
 
-## Prerequisites
+## ✅ Prerequisites
 * Node.js v20
 * Next.js
 
-## File Structure
+## 🗄 File Structure
 ```bash
 ├── README.md
 ├── app
@@ -53,7 +52,7 @@
 ├── tailwind.config.js
 └── tsconfig.json
 ```
-## Getting Started
+## 🏃 Getting Started
 Install all library/project dependencies.
 ```bash
 nvm use
@@ -83,7 +82,7 @@ imagemin assets/*.jpg --out-dir=assets/optimized --plugin=mozjpeg --plugin.mozjp
 ```
 All the newly generated images are placed in `public/assets/optimized` directory.
 
-## CICD
+## 🛠️ CICD
 Using GitHub Actions its process is triggered under two conditions:
 * There is an update to the `main` branch.
 * There were changes modified in the `/site` directory.

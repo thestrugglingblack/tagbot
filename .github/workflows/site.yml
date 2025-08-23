@@ -25,6 +25,12 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+          cache: npm
+          cache-dependency-path: './site/package-lock.json'
+
+      - name: Create .env.local
+        run: |
+          echo "GITHUB_TOKEN=${{ secrets.GH_TOKEN }}" > .env.local
 
       - name: Build & Deploy
         uses: Azure/static-web-apps-deploy@v1
