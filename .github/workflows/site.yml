@@ -30,7 +30,7 @@ jobs:
 
       - name: Create .env.local
         run: |
-          echo "GITHUB_TOKEN=${{ secrets.GH_TOKEN }}" > .env.local
+          echo "NEXT_PUBLIC_GITHUB_TOKEN=${{ secrets.GH_TOKEN }}" > .env.local
 
       - name: Build & Deploy
         uses: Azure/static-web-apps-deploy@v1

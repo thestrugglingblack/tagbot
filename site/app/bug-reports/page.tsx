@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
+import { formatBugReportIssue } from '../../utils/bugReportFormatter';
+
 import Image from 'next/image'
 
 
@@ -12,41 +14,62 @@ export default function BugReportsPage() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [errorMessage, setErrorMessage] = useState('')
 
-      const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setErrorMessage('');
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  setErrorMessage('');
 
-    try {
-      const formData = new FormData(e.target as HTMLFormElement);
+  try {
+    const formData = new FormData(e.target as HTMLFormElement);
 
-      const response = await fetch('/api/bug-report', {
-        method: 'POST',
-        body: formData,
-      });
+    const bugData = {
+      reportType: formData.get('report_type') as string,
+      severity: formData.get('severity') as string,
+      bugTitle: formData.get('bug_title') as string,
+      description: formData.get('description') as string,
+      stepsToReproduce: formData.get('steps_to_reproduce') as string,
+      serverId: formData.get('server_id') as string,
+      discordTag: formData.get('discord_tag') as string,
+      additionalInfo: formData.get('additional_info') as string,
+      timestamp: new Date().toISOString()
+    };
 
-      if (response.ok) {
-        setIsSubmitted(true);
-        setTimeout(() => setIsSubmitted(false), 3000);
-        // Reset form
-        (e.target as HTMLFormElement).reset();
-        setReportType('bug');
-        setSeverity('medium');
-      } else {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.error || `Server error: ${response.status}`);
-      }
-    } catch (error) {
-      console.error('Error submitting bug report:', error);
-      if (error instanceof TypeError && error.message.includes('fetch')) {
-        setErrorMessage('Network error. Please check your connection and try again.');
-      } else if (error instanceof Error) {
-        setErrorMessage(error.message);
-      } else {
-        setErrorMessage('Something went wrong. Please try again later.');
-      }
+    if (!bugData.bugTitle || !bugData.description) {
+      setErrorMessage('Bug title and description are required');
+      return;
     }
-  };
 
+    // Format the issue body using the same function as BUG_REPORT.md
+    const issueBody = formatBugReportIssue(bugData);
+    const labels = ['bug', `severity:${bugData.severity}`, `type:${bugData.reportType}`];
+
+    // Create GitHub issue directly
+    const response = await fetch('https://api.github.com/repos/thestrugglingblack/tagbot/issues', {
+      method: 'POST',
+      headers: {
+        'Authorization': `token ${process.env.NEXT_PUBLIC_GITHUB_TOKEN}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        title: bugData.bugTitle,
+        body: issueBody,
+        labels: labels
+      })
+    });
+
+    if (response.ok) {
+      setIsSubmitted(true);
+      setTimeout(() => setIsSubmitted(false), 3000);
+      (e.target as HTMLFormElement).reset();
+      setReportType('bug');
+      setSeverity('medium');
+    } else {
+      throw new Error(`Server error: ${response.status}`);
+    }
+  } catch (error) {
+    console.error('Error submitting bug report:', error);
+    setErrorMessage('Failed to submit bug report. Please try again.');
+  }
+};
   return (
     <div className="min-h-screen bg-white">
       <Header />

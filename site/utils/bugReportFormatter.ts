@@ -1,28 +1,3 @@
-import { Octokit } from '@octokit/rest';
-
-const octokit = new Octokit({
-  auth: process.env.GITHUB_TOKEN,
-});
-
-const REPO_OWNER = 'thestrugglingblack';
-const REPO_NAME = 'tagbot';
-
-export const createGitHubIssue = async (title: string, body: string, labels: string[]) => {
-  try {
-    const response = await octokit.rest.issues.create({
-      owner: REPO_OWNER,
-      repo: REPO_NAME,
-      title,
-      body,
-      labels,
-    });
-    return response.data;
-  } catch (error) {
-    console.error('Error creating GitHub issue:', error);
-    throw error;
-  }
-};
-
 export const formatBugReportIssue = (bugData: any) => {
   const reportTypeChecked = {
     bug: bugData.reportType === 'bug' ? '[x]' : '[ ]',
@@ -63,7 +38,7 @@ export const formatBugReportIssue = (bugData: any) => {
 
 Please fill out the following information when reporting bugs for TagBot.
 
-## Report Type 
+## Report Type
 Select the type of issue you're experiencing:
 - ${reportTypeChecked.bug} Bug Report
 - ${reportTypeChecked.crash} Bot Crash
@@ -71,18 +46,18 @@ Select the type of issue you're experiencing:
 - ${reportTypeChecked.command} Command Not Working
 - ${reportTypeChecked.data} Data Loss/Corruption
 
-## Severity Level 
+## Severity Level
 Choose the severity of this issue:
 - ${severityChecked.low} Low - Minor inconvenience
 - ${severityChecked.medium} Medium - Affects functionality
 - ${severityChecked.high} High - Major feature broken
 - ${severityChecked.critical} Critical - Bot unusable
 
-## Bug Title 
+## Bug Title
 **Brief description of the bug:**
 ${bugData.bugTitle}
 
-## Detailed Description 
+## Detailed Description
 **Describe what happened, what you expected to happen, and any error messages you received:**
 _(Maximum 500 characters)_
 
