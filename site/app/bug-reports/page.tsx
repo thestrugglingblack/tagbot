@@ -38,6 +38,12 @@ const handleSubmit = async (e: React.FormEvent) => {
       return;
     }
 
+       // Check if token is available
+    if (!process.env.NEXT_PUBLIC_GITHUB_TOKEN) {
+      setErrorMessage('Missing credentials. Please contact support.');
+      return;
+    }
+
     // Format the issue body using the same function as BUG_REPORT.md
     const issueBody = formatBugReportIssue(bugData);
     const labels = ['bug', `severity:${bugData.severity}`, `type:${bugData.reportType}`];
