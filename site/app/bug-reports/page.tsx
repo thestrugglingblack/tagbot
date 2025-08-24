@@ -14,23 +14,10 @@ export default function BugReportsPage() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [errorMessage, setErrorMessage] = useState('')
 
-      const debugInfo = {
-    tokenExists: !!process.env.NEXT_PUBLIC_GITHUB_TOKEN,
-    tokenLength: process.env.NEXT_PUBLIC_GITHUB_TOKEN?.length || 0,
-    tokenFirst4: process.env.NEXT_PUBLIC_GITHUB_TOKEN?.substring(0, 4) || 'N/A',
-    nodeEnv: process.env.NODE_ENV,
-    allNextPublicVars: Object.keys(process.env).filter(key => key.startsWith('NEXT_PUBLIC_'))
-  };
-
-  console.log('Debug Info:', debugInfo);
 
 const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
   setErrorMessage('');
-
-  // Debug: Check if token exists
-  console.log('Token exists:', !!process.env.NEXT_PUBLIC_GITHUB_TOKEN);
-  console.log('Token length:', process.env.NEXT_PUBLIC_GITHUB_TOKEN?.length || 0);
 
 
   try {
