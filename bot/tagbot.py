@@ -188,7 +188,10 @@ class TagBot(commands.Cog):
         # Check if platform is valid
         if platform not in PLATFORMS:
             valid_platforms = ", ".join(PLATFORMS.keys())
-            await self._send_error(ctx, f"Invalid platform '{platform}'. Valid platforms: {valid_platforms}")
+            await self._send_error(
+                ctx,
+                f"Invalid platform '{platform}'. Valid platforms: {valid_platforms}",
+            )
             return
 
         # Check if tag was provided
@@ -220,9 +223,7 @@ class TagBot(commands.Cog):
                     f"Tagbot added **{ctx.author.name}** tag name **{tag}** for **{platform}** platform."
                 )
         except Exception as e:
-            logger.error(
-                f"Exception: Error adding {user_id} in Couchbase DB, {e}"
-            )
+            logger.error(f"Exception: Error adding {user_id} in Couchbase DB, {e}")
             await self._send_error(
                 ctx,
                 "An error occurred while adding the tag. Please try again later...",

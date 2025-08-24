@@ -320,6 +320,7 @@ class TestTagBot:
         mock_ctx.send.reset_mock()
 
         from utils.default_msg import PLATFORMS
+
         expected_error_msg = PLATFORMS.get("psn")
 
         await tagbot.add(tagbot, mock_ctx)
@@ -336,7 +337,9 @@ class TestTagBot:
     async def test_add_command_invalid_platform(self, tagbot, mock_ctx):
         mock_ctx.message.content = "tagbot add invalid test_id"
         await tagbot.add(tagbot, mock_ctx)
-        mock_ctx.send.assert_called_once_with("Invalid platform 'invalid'. Valid platforms: psn, wb")
+        mock_ctx.send.assert_called_once_with(
+            "Invalid platform 'invalid'. Valid platforms: psn, wb"
+        )
 
     @pytest.mark.asyncio
     async def test_add_command_missing_platform(self, tagbot, mock_ctx):
