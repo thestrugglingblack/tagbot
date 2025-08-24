@@ -173,53 +173,57 @@ class TagBot(commands.Cog):
     async def add(self, ctx):
         logger.info(f"ADD: {ctx.author.id} called the command.")
         user_id = ctx.author.id
-        msg = ctx.message.content.strip().lower()
 
-        valid_platform_found = False
+        parts = ctx.message.content.strip().split()
 
-        for platform, error_message in PLATFORMS.items():
-            if msg.startswith(f"tagbot add {platform}"):
-                valid_platform_found = True
-                tag = msg[len(f"tagbot add {platform}") :].strip()
-                if not tag:
-                    logger.error(f'ADD: No user "tag" in command.')
-                    await self._send_error(ctx, error_message)
+        if len(parts) < 3:
+            await self._send_error(ctx, "Usage: `tagbot add <platform> <tag>`")
+            return
 
-                try:
-                    logger.info(f"ADD: Checking for {user_id} in Couchbase.")
-                    existing_user = self._get_tag_from_couchbase(user_id)
-                    if existing_user:
-                        logger.info(f"COUCHBASE: {user_id} exist.")
-                        self.couchbase_db.update_partial_item_in_collection(
-                            COUCHBASE_COLLECTION, str(user_id), platform, tag
-                        )
-                        logger.info(
-                            f"COUCHBASE: {user_id} set to {tag} on {platform} platform."
-                        )
-                        await ctx.send(
-                            f"TagBot updated **{ctx.author.name}** tag on the **{platform}** to **{tag}**"
-                        )
-                    else:
-                        logger.info(f"COUCHBASE: {user_id} not found in Couchbase.")
-                        self.couchbase_db.add_item_in_collection(
-                            COUCHBASE_COLLECTION, str(user_id), {platform: tag}
-                        )
-                        logger.info(f"COUCHBASE: Created tag information for {user_id}")
-                        await ctx.send(
-                            f"Tagbot added **{ctx.author.name}** tag name **{tag}** for **{platform}** platform."
-                        )
-                except Exception as e:
-                    logger.error(
-                        f"Exception: Error adding {user_id} in Couchbase DB, {e}"
-                    )
-                    await self._send_error(
-                        ctx,
-                        "An error occurred while adding the tag. Please try again later...",
-                    )
-                break
+        platform = parts[2].lower()
+        tag = " ".join(parts[3:])
 
-        if not valid_platform_found:
-            await self._send_error(ctx, "Invalid platform. Use 'psn' or 'wb'.")
+        if platform not in PLATFORMS:
+            valid_platforms = ", ".join(PLATFORMS.keys())
+            await self._send_error(
+                ctx,
+                f"Invalid platform '{platform}'. Valid platforms: {valid_platforms}",
+            )
+            return
+
+        if not tag:
+            await self._send_error(ctx, PLATFORMS[platform])
+            return
+
+        try:
+            logger.info(f"ADD: Checking for {user_id} in Couchbase.")
+            existing_user = self._get_tag_from_couchbase(user_id)
+            if existing_user:
+                logger.info(f"COUCHBASE: {user_id} exist.")
+                self.couchbase_db.update_partial_item_in_collection(
+                    COUCHBASE_COLLECTION, str(user_id), platform, tag
+                )
+                logger.info(
+                    f"COUCHBASE: {user_id} set to {tag} on {platform} platform."
+                )
+                await ctx.send(
+                    f"TagBot updated **{ctx.author.name}** tag on the **{platform}** to **{tag}**"
+                )
+            else:
+                logger.info(f"COUCHBASE: {user_id} not found in Couchbase.")
+                self.couchbase_db.add_item_in_collection(
+                    COUCHBASE_COLLECTION, str(user_id), {platform: tag}
+                )
+                logger.info(f"COUCHBASE: Created tag information for {user_id}")
+                await ctx.send(
+                    f"Tagbot added **{ctx.author.name}** tag name **{tag}** for **{platform}** platform."
+                )
+        except Exception as e:
+            logger.error(f"Exception: Error adding {user_id} in Couchbase DB, {e}")
+            await self._send_error(
+                ctx,
+                "An error occurred while adding the tag. Please try again later...",
+            )
 
     @commands.cooldown(3, 30, commands.BucketType.user)
     @commands.command(name="help")

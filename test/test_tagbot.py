@@ -316,25 +316,36 @@ class TestTagBot:
 
     @pytest.mark.asyncio
     async def test_add_command_missing_tag(self, tagbot, mock_ctx):
-        mock_ctx.message.content = "tagbot add psn "
+        mock_ctx.message.content = "tagbot add psn"  # No tag provided
         mock_ctx.send.reset_mock()
 
         from utils.default_msg import PLATFORMS
 
         expected_error_msg = PLATFORMS.get("psn")
 
-        # Mock couchbase to prevent duplicate calls
-        with patch.object(tagbot, "_get_tag_from_couchbase", return_value=None):
-            await tagbot.add(tagbot, mock_ctx)
+        await tagbot.add(tagbot, mock_ctx)
 
-            # Assert error sent
-            assert mock_ctx.send.call_args_list[0][0][0] == expected_error_msg
+        assert mock_ctx.send.call_args_list[0][0][0] == expected_error_msg
+
+    @pytest.mark.asyncio
+    async def test_add_command_insufficient_arguments(self, tagbot, mock_ctx):
+        mock_ctx.message.content = "tagbot add"
+        await tagbot.add(tagbot, mock_ctx)
+        mock_ctx.send.assert_called_once_with("Usage: `tagbot add <platform> <tag>`")
 
     @pytest.mark.asyncio
     async def test_add_command_invalid_platform(self, tagbot, mock_ctx):
         mock_ctx.message.content = "tagbot add invalid test_id"
         await tagbot.add(tagbot, mock_ctx)
-        mock_ctx.send.assert_called_once_with("Invalid platform. Use 'psn' or 'wb'.")
+        mock_ctx.send.assert_called_once_with(
+            "Invalid platform 'invalid'. Valid platforms: psn, wb"
+        )
+
+    @pytest.mark.asyncio
+    async def test_add_command_missing_platform(self, tagbot, mock_ctx):
+        mock_ctx.message.content = "tagbot add"
+        await tagbot.add(tagbot, mock_ctx)
+        mock_ctx.send.assert_called_once_with("Usage: `tagbot add <platform> <tag>`")
 
     @pytest.mark.asyncio
     async def test_add_command_exception(self, tagbot, mock_ctx):

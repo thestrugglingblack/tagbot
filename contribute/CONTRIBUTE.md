@@ -76,6 +76,10 @@ REDIS_PORT=6379
 COUCHBASE_HOST=localhost
 COUCHBASE_USERNAME=Administrator
 COUCHBASE_PASSWORD=password
+COUCHBASE_COLLECTION=mortal_kombat_1
+COUCHBASE_SCOPE=dev
+REDIS_SSL=false
+
 ```
 5. Run databases via Docker
 ```bash
@@ -205,7 +209,7 @@ Keep documentation current and comprehensive:
 **Documentation Standards:**
 - Use clear, concise language
 - Include code examples where helpful
-- Update relevant sections in `/docs` folder
+- Update relevant sections in `README.md` file
 - Ensure accuracy of all links and references
 
 **What to Document:**
