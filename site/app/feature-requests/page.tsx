@@ -4,17 +4,76 @@ import { useState } from 'react';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import Image from "next/image";
+import { formatFeatureRequestIssue } from '../../utils/featureRequestFormatter';
 
 export default function FeatureRequestsPage() {
   const [category, setCategory] = useState('enhancement');
   const [priority, setPriority] = useState('medium');
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('')
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitted(true);
-    setTimeout(() => setIsSubmitted(false), 3000);
-  };
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  setErrorMessage('');
+
+  try {
+    const formData = new FormData(e.target as HTMLFormElement);
+
+    const featureData = {
+      category: formData.get('category') as string,
+      priority: formData.get('priority') as string,
+      featureTitle: formData.get('feature_title') as string,
+      description: formData.get('description') as string,
+      problemSolved: formData.get('problem_solved') as string,
+      expectedBehavior: formData.get('expected_behavior') as string,
+      discordTag: formData.get('discord_tag') as string,
+      serverSize: formData.get('server_size') as string,
+      additionalContext: formData.get('additional_context') as string,
+      timestamp: new Date().toISOString()
+    };
+
+    if (!featureData.featureTitle || !featureData.description) {
+      setErrorMessage('Feature title and description are required');
+      return;
+    }
+
+    if (!process.env.NEXT_PUBLIC_GITHUB_TOKEN) {
+      setErrorMessage('Missing credentials. Please contact support.');
+      return;
+    }
+
+    // Format the issue body using the feature request formatter
+    const issueBody = formatFeatureRequestIssue(featureData);
+    const labels = ['feature-request', `priority:${featureData.priority}`, `category:${featureData.category}`];
+
+    // Create GitHub issue directly
+    const response = await fetch('https://api.github.com/repos/thestrugglingblack/tagbot/issues', {
+      method: 'POST',
+      headers: {
+        'Authorization': `token ${process.env.NEXT_PUBLIC_GITHUB_TOKEN}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        title: featureData.featureTitle,
+        body: issueBody,
+        labels: labels
+      })
+    });
+
+    if (response.ok) {
+      setIsSubmitted(true);
+      setTimeout(() => setIsSubmitted(false), 3000);
+      (e.target as HTMLFormElement).reset();
+      setCategory('enhancement');
+      setPriority('medium');
+    } else {
+      throw new Error(`Server error: ${response.status}`);
+    }
+  } catch (error) {
+    console.error('Error submitting feature request:', error);
+    setErrorMessage('Failed to submit feature request. Please try again.');
+  }
+};
 
   // TODO: Implement voting system once feature requests arrive
 
@@ -60,7 +119,7 @@ export default function FeatureRequestsPage() {
                 <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
                   <div className="flex items-center space-x-3">
                     <i className="ri-check-circle-line text-green-600 text-xl"></i>
-                    <p className="text-green-800 font-medium">Feature request submitted! We\ll review your suggestion.</p>
+                    <p className="text-green-800 font-medium">Feature request submitted! We'll review your suggestion.</p>
                   </div>
                 </div>
               )}
