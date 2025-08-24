@@ -205,7 +205,6 @@ class TestTagBot:
         await tagbot.on_command_error(mock_ctx, error)
         mock_ctx.send.assert_not_called()
 
-
     @pytest.mark.asyncio
     async def test_tag_no_mentions(self, tagbot, mock_ctx):
         mock_ctx.message.mentions = []

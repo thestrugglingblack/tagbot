@@ -134,7 +134,6 @@ class TagBot(commands.Cog):
         # Check Couchbase connection
         try:
             if self.couchbase_db:
-                # Try a simple query to verify connection
                 self.couchbase_db.cluster.ping()
                 couchbase_status = "🟢 Connected"
                 status_details.append("✅ Couchbase: Operational")
@@ -146,7 +145,6 @@ class TagBot(commands.Cog):
             status_details.append(f"❌ Couchbase: {str(e)[:50]}...")
             logger.error(f"HEALTHCHECK: Couchbase connection failed: {e}")
 
-        # Determine overall status
         if "🟢" in redis_status and "🟢" in couchbase_status:
             overall_status = "🟢 All Systems Operational"
             embed_color = 0x00FF00  # Green
@@ -157,74 +155,57 @@ class TagBot(commands.Cog):
             overall_status = "🔴 Service Degraded"
             embed_color = 0xFF0000  # Red
 
-        # Calculate response time
         response_time = round((time.time() - start_time) * 1000, 2)
 
-        # Get bot uptime (approximate)
-        uptime_seconds = time.time() - getattr(self.bot, 'start_time', time.time())
+        uptime_seconds = time.time() - getattr(self.bot, "start_time", time.time())
         hours, remainder = divmod(int(uptime_seconds), 3600)
         minutes, seconds = divmod(remainder, 60)
         uptime_str = f"{hours}h {minutes}m {seconds}s"
 
-        # Create embed
         health_embed = Embed(
             title="🏥 TagBot Health Status",
             description=overall_status,
-            color=embed_color
+            color=embed_color,
         )
 
-        # Add status fields
-        health_embed.add_field(
-            name="🤖 Bot Status",
-            value=bot_status,
-            inline=True
-        )
+        health_embed.add_field(name="🤖 Bot Status", value=bot_status, inline=True)
+
+        health_embed.add_field(name="💾 Redis Status", value=redis_status, inline=True)
 
         health_embed.add_field(
-            name="💾 Redis Status",
-            value=redis_status,
-            inline=True
+            name="🗄️ Couchbase Status", value=couchbase_status, inline=True
         )
 
         health_embed.add_field(
-            name="🗄️ Couchbase Status",
-            value=couchbase_status,
-            inline=True
+            name="⏱️ Response Time", value=f"{response_time}ms", inline=True
         )
 
-        health_embed.add_field(
-            name="⏱️ Response Time",
-            value=f"{response_time}ms",
-            inline=True
-        )
-
-        health_embed.add_field(
-            name="🕐 Uptime",
-            value=uptime_str,
-            inline=True
-        )
+        health_embed.add_field(name="🕐 Uptime", value=uptime_str, inline=True)
 
         health_embed.add_field(
             name="🌐 Discord Latency",
             value=f"{round(self.bot.latency * 1000, 2)}ms",
-            inline=True
+            inline=True,
         )
 
-        # Add detailed status if there are issues
-        if status_details and any("❌" in detail or "⚠️" in detail for detail in status_details):
+        # Add detailed status if thre are issues
+        if status_details and any(
+            "❌" in detail or "⚠️" in detail for detail in status_details
+        ):
             health_embed.add_field(
                 name="🔍 Detailed Status",
-                value="\n".join(status_details[-3:]),  # Show last 3 details to avoid embed limits
-                inline=False
+                value="\n".join(status_details[-3:]),
+                inline=False,
             )
 
         health_embed.set_footer(
             text=f"Health check requested by {ctx.author.name} • {time.strftime('%Y-%m-%d %H:%M:%S UTC', time.gmtime())}",
-            icon_url=ctx.author.avatar.url if ctx.author.avatar else None
+            icon_url=ctx.author.avatar.url if ctx.author.avatar else None,
         )
 
         logger.info(
-            f"HEALTHCHECK: Status - Bot: Online, Redis: {redis_status}, Couchbase: {couchbase_status}, Response: {response_time}ms")
+            f"HEALTHCHECK: Status - Bot: Online, Redis: {redis_status}, Couchbase: {couchbase_status}, Response: {response_time}ms"
+        )
         await ctx.send(embed=health_embed)
 
     @commands.cooldown(3, 30, commands.BucketType.user)
