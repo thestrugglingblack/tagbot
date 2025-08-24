@@ -54,7 +54,7 @@ const handleSubmit = async (e: React.FormEvent) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        title: featureData.featureTitle,
+        title: `[FEATURE REQUEST] ${featureData.featureTitle}`,
         body: issueBody,
         labels: labels
       })

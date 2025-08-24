@@ -58,7 +58,7 @@ const handleSubmit = async (e: React.FormEvent) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        title: bugData.bugTitle,
+        title: `[BUG REPORT] ${bugData.bugTitle}`,
         body: issueBody,
         labels: labels
       })
