@@ -50,6 +50,8 @@ jobs:
           app_location: "/site"
           output_location: "out"
           api_location: ""
+        env:
+          NEXT_PUBLIC_GITHUB_TOKEN: ${{ secrets.NEXT_PUBLIC_GITHUB_TOKEN }}
 
   close_previews:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
