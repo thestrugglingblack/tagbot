@@ -1,4 +1,4 @@
-name: Docker
+name: Dockerize TagBot
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
     tags: ['v*']
 
 jobs:
-  build-and-push:
+  build_push_bot_docker_image:
     runs-on: ubuntu-latest
     permissions:
       contents: read

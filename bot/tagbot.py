@@ -222,6 +222,55 @@ class TagBot(commands.Cog):
             await self._send_error(ctx, "Invalid platform. Use 'psn' or 'wb'.")
 
     @commands.cooldown(3, 30, commands.BucketType.user)
+    @commands.command(name="support")
+    async def support(self, ctx):
+        logger.info(f"SUPPORT: {ctx.author.id} called the command.")
+
+        support_embed = Embed(
+            title="📞 Need Help with TagBot?",
+            description="We're here to help! Get support for bugs, feature requests, or general questions.",
+            color=0xB4B4B4,
+        )
+
+        support_embed.add_field(
+            name="🐛 Found a Bug?",
+            value="Report it at **[tagbot.gg](https://tagbot.gg/bug-reports)** and we'll get it fixed!",
+            inline=False,
+        )
+
+        support_embed.add_field(
+            name="💡 Have a Feature Idea?",
+            value="Share your suggestions at **[tagbot.gg](https://tagbot.gg/feature-request)** - we love hearing from our community!",
+            inline=False,
+        )
+
+        support_embed.add_field(
+            name="❓ Need General Help?",
+            value="Visit **[tagbot.gg](https://tagbot.gg/faq-users)** for FAQs, guides, and support resources.",
+            inline=False,
+        )
+
+        support_embed.add_field(
+            name="🔗 Support Website",
+            value="**[tagbot.gg](https://tagbot.gg)**",
+            inline=True,
+        )
+
+        support_embed.add_field(
+            name="⚡ Quick Help",
+            value="Use `tagbot help` for command info",
+            inline=True,
+        )
+
+        support_embed.set_footer(
+            text="TagBot Support • We typically respond within 24 hours",
+            icon_url=DISCORD_IMAGE,
+        )
+
+        logger.info(f"SUPPORT: Sent support information to {ctx.author.id}")
+        await ctx.send(embed=support_embed)
+
+    @commands.cooldown(3, 30, commands.BucketType.user)
     @commands.command(name="help")
     async def help_command(self, ctx):
         logger.info(f"HELP: {ctx.author.id} called command.")

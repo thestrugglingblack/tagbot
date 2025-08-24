@@ -150,7 +150,7 @@ Write clear and concise commit messages using this format: `type: brief descript
 Follow these steps when submitting a pull request:
 
 **Before Submitting:**
-- Fill out the [pull request template](../.github/pull_request_template.md) completely
+- Fill out the [pull request template](./PULL_REQUEST_TEMPLATE.md) completely
 - Ensure all tests pass locally
 - Verify your code follows the project's coding standards
 - Include relevant issue numbers in your PR description

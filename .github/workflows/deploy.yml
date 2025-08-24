@@ -2,13 +2,13 @@ name: Deploy TagBot
 
 on:
   workflow_run:
-    workflows: ["Docker"]
+    workflows: ["Dockerize Tagbot"]
     types:
       - completed
     branches: [ main ]
 
 jobs:
-  deploy:
+  deploy_discord_bot:
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     defaults:

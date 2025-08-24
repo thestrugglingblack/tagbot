@@ -1,4 +1,4 @@
-name: Bot + Site Lint
+name: Lint TagBot + tagbot.gg
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     branches: ['*']
 
 jobs:
-  lint-bot:
+  lint_bot:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -24,7 +24,7 @@ jobs:
         run: flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics --exclude=.venv,.git,__pycache__,build,dist
       - name: Check formatting with black
         run: black --check .
-  lint-site:
+  lint_site:
     runs-on: ubuntu-latest
     defaults:
       run:
