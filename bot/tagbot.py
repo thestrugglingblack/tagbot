@@ -278,12 +278,12 @@ class TagBot(commands.Cog):
         embedded_help_msg.set_thumbnail(url=DISCORD_IMAGE)
         embedded_help_msg.add_field(
             name="",
-            value="**tagbot tag @user**\n\n**tagbot add <platform> <tag>**\n\n**tagbot help**\n\n**tagbot healthcheck**",
+            value="**tagbot tag @user**\n\n**tagbot add <platform> <tag>**\n\n**tagbot help**\n\n**tagbot healthcheck**\n\n**tagbot support**",
             inline=True,
         )
         embedded_help_msg.add_field(
             name="",
-            value="Get a user's gaming tags.\n\nSave user gaming tag to platform.\n\nDisplay available commands.\n\nDisplay status of TagBot.",
+            value="Get a user's gaming tags.\n\nSave user gaming tag to platform.\n\nDisplay available commands.\n\nDisplay status of TagBot.\n\nDisplay support information for Tagbot.",
             inline=True,
         )
         logger.info(f"HELP: Sent help command to channel.")
