@@ -16,15 +16,15 @@ export default function DocumentationPage() {
   const commands = {
     basic: [
       {
-        command: 'tagbot tag',
+        command: '!tagbot tag',
         description: 'List all available gamer tags for Discord user',
-        example: 'tagbot tag @errormacro',
+        example: '!tagbot tag @errormacro',
         category: 'Information'
       },
       {
-        command: 'tagbot add "platform" "player tag name"',
+        command: '!tagbot add "platform" "player tag name"',
         description: 'Add or update  plater gamer tag to platform ',
-        example: ' tagbot add psn forthelinkuei',
+        example: '!tagbot add psn forthelinkuei',
         category: 'Creation',
           options: [
               'psn: Set tag name for Playstation Network',
@@ -32,17 +32,17 @@ export default function DocumentationPage() {
             ]
       },
       {
-        command: 'tagbot help',
+        command: '!tagbot commands',
         description: 'Display all available commands for Tagbot',
-        example: 'tagbot help',
+        example: '!tagbot commands',
         category: 'Utility'
       }
     ],
     utility: [
       {
-        command: 'tagbot healthcheck',
+        command: '!tagbot healthcheck',
         description: 'Checks the running status of TagBot server',
-        example: 'tagbot healthcheck',
+        example: '!tagbot healthcheck',
         category: 'Information'
       }
     ]

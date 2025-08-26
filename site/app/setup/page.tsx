@@ -194,7 +194,7 @@ export default function SetupPage() {
                     <h3 className="text-xl font-semibold text-gray-900 mb-4">Test TagBot Commands</h3>
                     <div className="bg-gray-900 text-green-400 p-6 rounded-lg font-mono">
                       <p className="mb-2"># Test if TagBot is working</p>
-                      <p className="text-white">tagbot help</p>
+                      <p className="text-white">!tagbot healthcheck</p>
                     </div>
                   </div>
                 </div>
@@ -209,7 +209,7 @@ export default function SetupPage() {
                   <div>
                     <h3 className="text-xl font-semibold text-gray-900 mb-4">Quick Start Command</h3>
                     <div className="bg-gray-900 text-green-400 p-6 rounded-lg font-mono mb-4">
-                      <p className="text-white">tagbot add psn saibotnoob</p>
+                      <p className="text-white">!tagbot add psn saibotnoob</p>
                     </div>
                       {/* eslint-disable-next-line react/no-unescaped-entities */}
                     <p className="text-gray-700">This adds "saibotnoob" as your gamer tag for PlayStation Network.</p>

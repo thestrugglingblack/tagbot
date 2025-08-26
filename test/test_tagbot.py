@@ -53,7 +53,7 @@ def mock_ctx():
     ctx.message = MagicMock()
     ctx.message.mentions = []
     ctx.message.content = ""
-
+    ctx.prefix = "!tagbot "
     ctx.send = AsyncMock()
 
     return ctx
@@ -169,7 +169,6 @@ class TestTagBot:
             ) as mock_get:
                 mock_get.side_effect = MockDocNotFoundException("Document not found")
 
-                # Now when the code runs, it will catch our mocked exception class
                 result = tagbot._get_tag_from_couchbase(user_id)
                 assert result is None
 
@@ -208,9 +207,9 @@ class TestTagBot:
     @pytest.mark.asyncio
     async def test_tag_no_mentions(self, tagbot, mock_ctx):
         mock_ctx.message.mentions = []
-        await tagbot.tag(tagbot, mock_ctx)
+        await tagbot.tag.callback(tagbot, mock_ctx)
         mock_ctx.send.assert_called_once_with(
-            "Please mention the Discord user when using TagBot. _*Example*: tagbot tag @thestrugglingblack_ "
+            "Please mention the Discord user when using TagBot. _*Example*: !tagbot tag @thestrugglingblack_ "
         )
 
     @pytest.mark.asyncio
@@ -223,7 +222,7 @@ class TestTagBot:
         redis_tag = {"psn": "test_psn", "wb": "test_wb"}
         tagbot.redis_db.get.return_value = redis_tag
 
-        await tagbot.tag(tagbot, mock_ctx)
+        await tagbot.tag.callback(tagbot, mock_ctx)
 
         tagbot.redis_db.get.assert_called_once_with(
             mock_ctx.guild.id, mentioned_user.id
@@ -248,7 +247,7 @@ class TestTagBot:
         ) as mock_get_tag, patch.object(
             tagbot, "_cache_tag_in_redis"
         ) as mock_cache_tag:
-            await tagbot.tag(tagbot, mock_ctx)
+            await tagbot.tag.callback(tagbot, mock_ctx)
 
             mock_get_tag.assert_called_once_with(mentioned_user.id)
             mock_cache_tag.assert_called_once_with(
@@ -268,7 +267,7 @@ class TestTagBot:
 
         tagbot.redis_db.get.return_value = None
         with patch.object(tagbot, "_get_tag_from_couchbase", return_value=None):
-            await tagbot.tag(tagbot, mock_ctx)
+            await tagbot.tag.callback(tagbot, mock_ctx)
             mock_ctx.send.assert_called_once()
             assert "doesn't have any tags" in mock_ctx.send.call_args[0][0]
 
@@ -280,17 +279,17 @@ class TestTagBot:
         mock_ctx.message.mentions = [mentioned_user]
 
         tagbot.redis_db.get.side_effect = Exception("Test exception")
-        await tagbot.tag(tagbot, mock_ctx)
+        await tagbot.tag.callback(tagbot, mock_ctx)
         mock_ctx.send.assert_called_once()
         assert "An error occurred" in mock_ctx.send.call_args[0][0]
 
     @pytest.mark.asyncio
     async def test_add_command_success_update(self, tagbot, mock_ctx):
-        mock_ctx.message.content = "tagbot add psn test_psn_id"
+        mock_ctx.message.content = "!tagbot add psn test_psn_id"
         with patch.object(
             tagbot, "_get_tag_from_couchbase", return_value={"wb": "existing_tag"}
         ):
-            await tagbot.add(tagbot, mock_ctx)
+            await tagbot.add.callback(tagbot, mock_ctx)
 
             tagbot.couchbase_db.update_partial_item_in_collection.assert_called_once_with(
                 "tags", str(mock_ctx.author.id), "psn", "test_psn_id"
@@ -299,9 +298,9 @@ class TestTagBot:
 
     @pytest.mark.asyncio
     async def test_add_command_success_new(self, tagbot, mock_ctx):
-        mock_ctx.message.content = "tagbot add psn test_psn_id"
+        mock_ctx.message.content = "!tagbot add psn test_psn_id"
         with patch.object(tagbot, "_get_tag_from_couchbase", return_value=None):
-            await tagbot.add(tagbot, mock_ctx)
+            await tagbot.add.callback(tagbot, mock_ctx)
 
             tagbot.couchbase_db.add_item_in_collection.assert_called_once_with(
                 "tags", str(mock_ctx.author.id), {"psn": "test_psn_id"}
@@ -310,43 +309,41 @@ class TestTagBot:
 
     @pytest.mark.asyncio
     async def test_add_command_missing_tag(self, tagbot, mock_ctx):
-        mock_ctx.message.content = "tagbot add psn"  # No tag provided
+        mock_ctx.message.content = (
+            "!tagbot add psn"  # No tag provided - only 2 parts after prefix
+        )
         mock_ctx.send.reset_mock()
 
-        from utils.default_msg import PLATFORMS
+        await tagbot.add.callback(tagbot, mock_ctx)
 
-        expected_error_msg = PLATFORMS.get("psn")
-
-        await tagbot.add(tagbot, mock_ctx)
-
-        assert mock_ctx.send.call_args_list[0][0][0] == expected_error_msg
+        mock_ctx.send.assert_called_once_with("Usage: `!tagbot add <platform> <tag>`")
 
     @pytest.mark.asyncio
     async def test_add_command_insufficient_arguments(self, tagbot, mock_ctx):
-        mock_ctx.message.content = "tagbot add"
-        await tagbot.add(tagbot, mock_ctx)
-        mock_ctx.send.assert_called_once_with("Usage: `tagbot add <platform> <tag>`")
+        mock_ctx.message.content = "!tagbot add"
+        await tagbot.add.callback(tagbot, mock_ctx)
+        mock_ctx.send.assert_called_once_with("Usage: `!tagbot add <platform> <tag>`")
 
     @pytest.mark.asyncio
     async def test_add_command_invalid_platform(self, tagbot, mock_ctx):
-        mock_ctx.message.content = "tagbot add invalid test_id"
-        await tagbot.add(tagbot, mock_ctx)
+        mock_ctx.message.content = "!tagbot add invalid test_id"
+        await tagbot.add.callback(tagbot, mock_ctx)
         mock_ctx.send.assert_called_once_with(
             "Invalid platform 'invalid'. Valid platforms: psn, wb"
         )
 
     @pytest.mark.asyncio
     async def test_add_command_missing_platform(self, tagbot, mock_ctx):
-        mock_ctx.message.content = "tagbot add"
-        await tagbot.add(tagbot, mock_ctx)
-        mock_ctx.send.assert_called_once_with("Usage: `tagbot add <platform> <tag>`")
+        mock_ctx.message.content = "!tagbot add"
+        await tagbot.add.callback(tagbot, mock_ctx)
+        mock_ctx.send.assert_called_once_with("Usage: `!tagbot add <platform> <tag>`")
 
     @pytest.mark.asyncio
     async def test_add_command_exception(self, tagbot, mock_ctx):
-        mock_ctx.message.content = "tagbot add psn test_psn_id"
+        mock_ctx.message.content = "!tagbot add psn test_psn_id"
         with patch.object(tagbot, "_get_tag_from_couchbase") as mock_get_tag:
             mock_get_tag.side_effect = Exception("Test exception")
-            await tagbot.add(tagbot, mock_ctx)
+            await tagbot.add.callback(tagbot, mock_ctx)
             mock_ctx.send.assert_called_once()
             assert "An error occurred" in mock_ctx.send.call_args[0][0]
 
@@ -355,7 +352,7 @@ class TestTagBot:
         with patch("bot.tagbot.Embed", return_value=MagicMock()) as mock_embed_class:
             mock_embed = mock_embed_class.return_value
 
-            await tagbot.help_command(tagbot, mock_ctx)
+            await tagbot.help_command.callback(tagbot, mock_ctx)
 
             mock_embed_class.assert_called_once()
             mock_embed.set_thumbnail.assert_called_once()
