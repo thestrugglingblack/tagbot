@@ -22,11 +22,11 @@ const organizerFAQs = [
       },
       {
         question: 'How do I add my own gamer tag?',
-        answer: 'Easy—just type: `tagbot add [platform] [gamer tag]`. Example: `tagbot add psn oneonedeadlywinds`.'
+        answer: 'Easy—just type: `!tagbot add [platform] [gamer tag]`. Example: `tagbot add psn oneonedeadlywinds`.'
       },
       {
         question: 'How do I verify TagBot is working properly in my Discord Server?',
-        answer: 'Run `tagbot healthcheck`. If you get a response, you’re good to go.'
+        answer: 'Run `!tagbot healthcheck`. If you get a response, you’re good to go.'
       },
       {
         question: 'Can I restrict TagBot to a specific channel only?',
@@ -84,7 +84,7 @@ const organizerFAQs = [
       },
       {
         question: 'How do players update their tag if they made a mistake?',
-        answer: 'They just re-run the same add command: `tagbot add [platform] [gamer tag]`. Super simple.'
+        answer: 'They just re-run the same add command: `!tagbot add [platform] [gamer tag]`. Super simple.'
       },
       {
         question: 'Can TagBot integrate with tournament bracket software?',
@@ -157,19 +157,19 @@ const organizerFAQs = [
             <h2 className="text-2xl font-bold text-gray-900 mb-4">Quick Start Commands</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="bg-gray-50 p-4 rounded-lg">
-                <code className="text-green-600 font-mono">tagbot add [platform] [name]</code>
+                <code className="text-green-600 font-mono">!tagbot add [platform] [name]</code>
                 <p className="text-sm text-gray-600 mt-1">Add or update gamer tag</p>
               </div>
               <div className="bg-gray-50 p-4 rounded-lg">
-                <code className="text-green-600 font-mono">tagbot tag [discord username]</code>
+                <code className="text-green-600 font-mono">!tagbot tag [discord username]</code>
                 <p className="text-sm text-gray-600 mt-1">Retrieve gamer tag</p>
               </div>
               <div className="bg-gray-50 p-4 rounded-lg">
-                <code className="text-green-600 font-mono">tagbot help</code>
+                <code className="text-green-600 font-mono">!tagbot commands</code>
                 <p className="text-sm text-gray-600 mt-1">Display available commands</p>
               </div>
               <div className="bg-gray-50 p-4 rounded-lg">
-                <code className="text-green-600 font-mono">tagbot healthcheck</code>
+                <code className="text-green-600 font-mono">!tagbot healthcheck</code>
                 <p className="text-sm text-gray-600 mt-1">Check Tagbot status</p>
               </div>
             </div>
