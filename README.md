@@ -54,6 +54,56 @@ It grabs your opponent's tag instantly, so you can stop waiting and start playin
 * Docker
 
 ## 🌵 File Structure
+```tree
+├── CHANGELOG.md
+├── Dockerfile
+├── README.md
+├── bot
+│   └── tagbot.py
+├── contribute
+│   ├── CONTRIBUTE.md
+│   └── PULL_REQUEST_TEMPLATE.md
+├── db
+│   ├── couchbasedb.py
+│   └── redisdb.py
+├── docker-compose.yml
+├── env.template
+├── logs
+│   └── tagbot-application.log
+├── requirements.txt
+├── run.py
+├── site
+│   ├── README.md
+│   ├── app
+│   ├── components
+│   ├── eslint.config.mjs
+│   ├── next-env.d.ts
+│   ├── next.config.ts
+│   ├── package.json
+│   ├── postcss.config.mjs
+│   ├── public
+│   ├── tailwind.config.js
+│   ├── tsconfig.json
+│   └── utils
+├── terraform
+│   ├── main.tf
+│   ├── network.tf
+│   ├── outputs.tf
+│   ├── redis.tf
+│   ├── site.tf
+│   ├── tagbot.tf
+│   └── variables.tf
+├── test
+│   ├── test_couchbasedb.py
+│   ├── test_get_prefix.py
+│   ├── test_redisdb.py
+│   └── test_tagbot.py
+└── utils
+    ├── check_env.py
+    ├── default_msg.py
+    ├── get_prefix.py
+    └── logger.py
+```
 
 ## 💾 Data
 

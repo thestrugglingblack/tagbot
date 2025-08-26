@@ -1,0 +1,184 @@
+<mxfile host="app.diagrams.net" modified="2024-01-15T10:00:00.000Z" agent="5.0" etag="xyz" version="22.1.16">
+  <diagram name="TagBot Architecture" id="tagbot-arch">
+    <mxGraphModel dx="1422" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Internet/External -->
+        <mxCell id="internet" value="Internet" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="40" y="40" width="120" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Users -->
+        <mxCell id="discord-users" value="Discord Users" style="shape=actor;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="40" y="140" width="60" height="80" as="geometry" />
+        </mxCell>
+
+        <mxCell id="web-users" value="Website Users" style="shape=actor;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="40" y="260" width="60" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- Azure Resource Group Container -->
+        <mxCell id="azure-rg" value="Azure Resource Group: tagbot-resources" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=14;fontStyle=1;verticalAlign=top;align=left;spacingLeft=10;spacingTop=10;" vertex="1" parent="1">
+          <mxGeometry x="200" y="40" width="920" height="720" as="geometry" />
+        </mxCell>
+
+        <!-- Static Web App -->
+        <mxCell id="static-web-app" value="Azure Static Web App&#xa;swa-tagbot-prod&#xa;&#xa;• tagbot.gg&#xa;• www.tagbot.gg&#xa;• Next.js Frontend&#xa;• Bug Reports&#xa;• Feature Requests" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;verticalAlign=top;align=left;spacingLeft=10;spacingTop=10;" vertex="1" parent="1">
+          <mxGeometry x="240" y="80" width="200" height="120" as="geometry" />
+        </mxCell>
+
+        <!-- Virtual Network Container -->
+        <mxCell id="vnet" value="Virtual Network: tagbot-network (10.0.0.0/16)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;fontStyle=1;verticalAlign=top;align=left;spacingLeft=10;spacingTop=10;" vertex="1" parent="1">
+          <mxGeometry x="240" y="240" width="640" height="480" as="geometry" />
+        </mxCell>
+
+        <!-- NAT Gateway -->
+        <mxCell id="nat-gateway" value="NAT Gateway&#xa;tagbot-nat-gateway&#xa;&#xa;Public IP: &#xa;(Dynamic)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;verticalAlign=top;align=center;" vertex="1" parent="1">
+          <mxGeometry x="260" y="260" width="120" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- Network Security Group -->
+        <mxCell id="nsg" value="Network Security Group&#xa;tagbot-security-group&#xa;&#xa;Rules:&#xa;• Couchbase (443)&#xa;• Redis (6380)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=10;verticalAlign=top;align=center;" vertex="1" parent="1">
+          <mxGeometry x="760" y="260" width="110" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- Subnet -->
+        <mxCell id="subnet" value="Subnet: internal-tagbot-subnet (10.0.2.0/24)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;fontStyle=1;verticalAlign=top;align=left;spacingLeft=10;spacingTop=10;" vertex="1" parent="1">
+          <mxGeometry x="280" y="380" width="580" height="320" as="geometry" />
+        </mxCell>
+
+        <!-- Container Group -->
+        <mxCell id="container-group" value="Container Group: tagbot-discord-bot" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;fontStyle=1;verticalAlign=top;align=left;spacingLeft=10;spacingTop=10;" vertex="1" parent="1">
+          <mxGeometry x="320" y="420" width="260" height="120" as="geometry" />
+        </mxCell>
+
+        <!-- Discord Bot Container -->
+        <mxCell id="discord-bot" value="TagBot Container&#xa;&#xa;Image: ghcr.io/thestrugglingblack/tagbot:latest&#xa;CPU: 0.5, Memory: 1.0GB&#xa;&#xa;• Discord Bot&#xa;• Command Processing&#xa;• User Management" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;verticalAlign=top;align=left;spacingLeft=10;spacingTop=10;" vertex="1" parent="1">
+          <mxGeometry x="330" y="450" width="240" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- Storage Account -->
+        <mxCell id="storage-account" value="Storage Account&#xa;tagbotlogs[random]&#xa;&#xa;File Share:&#xa;tagbot-logs (1GB)&#xa;&#xa;Mounted to:&#xa;/app/logs" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;verticalAlign=top;align=center;" vertex="1" parent="1">
+          <mxGeometry x="320" y="560" width="120" height="120" as="geometry" />
+        </mxCell>
+
+        <!-- Redis Cache -->
+        <mxCell id="redis" value="Redis Cache&#xa;tagbot-redis&#xa;&#xa;SKU: Basic C1&#xa;Port: 6380 (SSL)&#xa;TLS 1.2&#xa;&#xa;• Session Storage&#xa;• Caching Layer&#xa;• Rate Limiting" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;verticalAlign=top;align=center;" vertex="1" parent="1">
+          <mxGeometry x="620" y="420" width="120" height="140" as="geometry" />
+        </mxCell>
+
+        <!-- External Services -->
+        <mxCell id="external-services" value="External Services" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f0f0f0;strokeColor=#666666;fontSize=14;fontStyle=1;verticalAlign=top;align=left;spacingLeft=10;spacingTop=10;" vertex="1" parent="1">
+          <mxGeometry x="920" y="80" width="180" height="200" as="geometry" />
+        </mxCell>
+
+        <!-- Discord API -->
+        <mxCell id="discord-api" value="Discord API" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="940" y="110" width="80" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- Couchbase Capella -->
+        <mxCell id="couchbase" value="Couchbase&#xa;Capella&#xa;(Cloud)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1040" y="110" width="60" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- GitHub -->
+        <mxCell id="github" value="GitHub API&#xa;(Issues)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="940" y="180" width="80" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- Container Registry -->
+        <mxCell id="ghcr" value="GitHub&#xa;Container&#xa;Registry" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1040" y="180" width="60" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Connections -->
+        <!-- Users to Internet -->
+        <mxCell id="users-internet1" value="" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="discord-users" target="internet">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="400" y="400" as="sourcePoint" />
+            <mxPoint x="450" y="350" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="users-internet2" value="" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="web-users" target="internet">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="400" y="400" as="sourcePoint" />
+            <mxPoint x="450" y="350" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Internet to Static Web App -->
+        <mxCell id="internet-webapp" value="HTTPS" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="internet" target="static-web-app">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="400" y="400" as="sourcePoint" />
+            <mxPoint x="450" y="350" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Static Web App to GitHub -->
+        <mxCell id="webapp-github" value="API Calls" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="static-web-app" target="github">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="400" y="400" as="sourcePoint" />
+            <mxPoint x="450" y="350" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Discord Bot to Discord API -->
+        <mxCell id="bot-discord" value="Discord&#xa;WebSocket" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=0.25;exitDx=0;exitDy=0;" edge="1" parent="1" source="discord-bot" target="discord-api">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="400" y="400" as="sourcePoint" />
+            <mxPoint x="450" y="350" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Discord Bot to Couchbase -->
+        <mxCell id="bot-couchbase" value="HTTPS&#xa;443" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="discord-bot" target="couchbase">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="400" y="400" as="sourcePoint" />
+            <mxPoint x="450" y="350" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Discord Bot to Redis -->
+        <mxCell id="bot-redis" value="TLS&#xa;6380" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=0.75;exitDx=0;exitDy=0;" edge="1" parent="1" source="discord-bot" target="redis">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="400" y="400" as="sourcePoint" />
+            <mxPoint x="450" y="350" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Container to Storage -->
+        <mxCell id="container-storage" value="Mount&#xa;/app/logs" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="container-group" target="storage-account">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="400" y="400" as="sourcePoint" />
+            <mxPoint x="450" y="350" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- NAT Gateway connections -->
+        <mxCell id="nat-internet" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="1" source="nat-gateway" target="internet">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="400" y="400" as="sourcePoint" />
+            <mxPoint x="450" y="350" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Container pulls from GHCR -->
+        <mxCell id="container-ghcr" value="Pull&#xa;Images" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=0;exitDx=0;exitDy=0;dashed=1;" edge="1" parent="1" source="container-group" target="ghcr">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="400" y="400" as="sourcePoint" />
+            <mxPoint x="450" y="350" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Legend -->
+        <mxCell id="legend" value="Legend:&#xa;━ Network Traffic&#xa;┅ Image Pull&#xa;🔒 TLS/SSL" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f0f0f0;strokeColor=#666666;fontSize=10;verticalAlign=top;align=left;spacingLeft=5;spacingTop=5;" vertex="1" parent="1">
+          <mxGeometry x="40" y="600" width="120" height="80" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
