@@ -39,7 +39,7 @@ const organizerFAQs = [
     questions: [
       {
         question: 'What platforms are supported?',
-        answer: 'Right now: PlayStation Network and Warner Brothers. More to come if demand grows.'
+        answer: 'Right now: PlayStation Network, Warner Brothers, Steam, Street Fighter, Tekken and Xbox. More to come if demand grows.'
       },
       {
         question: 'Can I delete or add another player’s gamer tag?',

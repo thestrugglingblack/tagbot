@@ -19,7 +19,7 @@ load_dotenv()
 TAG_EXPIRATION = os.getenv("TAG_EXPIRATION")
 COUCHBASE_USERNAME = os.getenv("COUCHBASE_USERNAME")
 COUCHBASE_PASSWORD = os.getenv("COUCHBASE_PASSWORD")
-COUCHBASE_BUCKET_NAME = os.getenv("COUCHBASE_BUCKET_NAME")
+COUCHBASE_BUCKET_NAME = os.getenv("COUCHBASE_BUCKET")
 COUCHBASE_COLLECTION = os.getenv("COUCHBASE_COLLECTION")
 DISCORD_IMAGE = os.getenv("DISCORD_IMAGE")
 
@@ -49,7 +49,7 @@ class TagBot(commands.Cog):
             couchbase_db = CouchbaseDB(
                 os.getenv("COUCHBASE_USERNAME"),
                 os.getenv("COUCHBASE_PASSWORD"),
-                os.getenv("COUCHBASE_BUCKET_NAME"),
+                os.getenv("COUCHBASE_BUCKET"),
             )
             couchbase_db.cluster.wait_until_ready(timedelta(seconds=10))
             logger.info("COUCHBASE: Connected successfully to Couchbase.")
@@ -395,3 +395,11 @@ class TagBot(commands.Cog):
         )
         logger.info(f"HELP: Sent command list to channel.")
         await ctx.send(embed=embedded_help_msg)
+
+    @commands.cooldown(3, 30, commands.BucketType.user)
+    @commands.command(name="list")
+    async def list_platforms(self, ctx):
+        logger.info(f"LIST: {ctx.author.id} called list platforms.")
+        await ctx.send(
+            f'Tagbot supports the following platforms {", ".join(PLATFORMS.keys())}'
+        )
