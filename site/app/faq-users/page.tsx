@@ -26,7 +26,7 @@ const userFAQs = [
       },
       {
         question: 'What platforms does TagBot support?',
-        answer: 'Right now TagBot supports PlayStation Network and Warner Brothers (perfect for Mortal Kombat). If the FGC wants it, we’ll expand to Steam, Xbox, and more!'
+        answer: 'Right now TagBot supports PlayStation Network, Warner Brothers, Steam, Street Fighter, Tekken and Xbox.'
       }
     ]
   },

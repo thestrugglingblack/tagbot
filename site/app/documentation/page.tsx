@@ -29,12 +29,22 @@ export default function DocumentationPage() {
           options: [
               'psn: Set tag name for Playstation Network',
               'wb: Set tag name for Warner Brothers',
+              'steam: Set name for Steam ',
+              'sf: Set tag name for Capcom Fighter Network',
+              'tekken: Set tag name for Tekken',
+              'xbox: Set tag name for Xbox'
             ]
       },
       {
         command: '!tagbot commands',
         description: 'Display all available commands for Tagbot',
         example: '!tagbot commands',
+        category: 'Utility'
+      },
+              {
+        command: '!tagbot list',
+        description: 'Display all available platforms supported for Tagbot',
+        example: '!tagbot list',
         category: 'Utility'
       }
     ],
@@ -105,7 +115,7 @@ export default function DocumentationPage() {
                   </div>
                   <div>
                     <h2 className="text-xl font-semibold text-blue-900">Command Syntax</h2>
-                    <p className="text-blue-700">All commands start with the prefix: <code className="bg-blue-200 px-2 py-1 rounded">tagbot</code></p>
+                    <p className="text-blue-700">All commands start with the prefix: <code className="bg-blue-200 px-2 py-1 rounded">!tagbot</code></p>
                   </div>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">

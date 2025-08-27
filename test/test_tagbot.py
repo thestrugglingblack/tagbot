@@ -329,7 +329,7 @@ class TestTagBot:
         mock_ctx.message.content = "!tagbot add invalid test_id"
         await tagbot.add.callback(tagbot, mock_ctx)
         mock_ctx.send.assert_called_once_with(
-            "Invalid platform 'invalid'. Valid platforms: psn, wb"
+            "Invalid platform 'invalid'. Valid platforms: psn, wb, steam, sf, tekken, xbox"
         )
 
     @pytest.mark.asyncio

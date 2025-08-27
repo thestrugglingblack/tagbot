@@ -23,6 +23,7 @@ load_dotenv()
 COUCHBASE_SCOPE = os.getenv("COUCHBASE_SCOPE")
 COUCHBASE_COLLECTION = os.getenv("COUCHBASE_COLLECTION")
 COUCHBASE_CONNECTION = os.getenv("COUCHBASE_CONNECTION") or "couchbase://localhost"
+COUCHBASE_BUCKET = os.getenv("COUCHBASE_BUCKET") or "tagbot"
 
 
 class CouchbaseDB:

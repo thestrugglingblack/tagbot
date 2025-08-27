@@ -57,7 +57,7 @@ jobs:
           echo 'discord_public_id = "${{ secrets.DISCORD_PUBLIC_ID }}"' >> terraform.tfvars
           echo 'couchbase_admin_username = "${{ secrets.COUCHBASE_USERNAME }}"' >> terraform.tfvars
           echo 'couchbase_admin_password = "${{ secrets.COUCHBASE_PASSWORD }}"' >> terraform.tfvars
-          echo 'couchbase_bucket_name = "${{ secrets.COUCHBASE_BUCKET_NAME }}"' >> terraform.tfvars
+          echo 'couchbase_bucket_name = "${{ secrets.COUCHBASE_BUCKET }}"' >> terraform.tfvars
           echo 'couchbase_collection = "${{ secrets.COUCHBASE_COLLECTION }}"' >> terraform.tfvars
           echo 'couchbase_scope = "${{ secrets.COUCHBASE_SCOPE }}"' >> terraform.tfvars
           echo 'tag_expiration = "3600"' >> terraform.tfvars
