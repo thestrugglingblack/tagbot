@@ -21,7 +21,7 @@ COUCHBASE_USERNAME = os.getenv("COUCHBASE_USERNAME")
 COUCHBASE_PASSWORD = os.getenv("COUCHBASE_PASSWORD")
 COUCHBASE_BUCKET_NAME = os.getenv("COUCHBASE_BUCKET")
 COUCHBASE_COLLECTION = os.getenv("COUCHBASE_COLLECTION")
-DISCORD_IMAGE = os.getenv("DISCORD_IMAGE")
+DISCORD_IMAGE = os.getenv("DISCORD_IMAGE") or ""
 
 
 class TagBot(commands.Cog):
@@ -385,12 +385,12 @@ class TagBot(commands.Cog):
         embedded_help_msg.set_thumbnail(url=DISCORD_IMAGE)
         embedded_help_msg.add_field(
             name="",
-            value="**!tagbot tag @user**\n\n**!tagbot add <platform> <tag>**\n\n**!tagbot commands**\n\n**!tagbot healthcheck**\n\n**!tagbot support**",
+            value="**!tagbot tag @user**\n\n**!tagbot add <platform> <tag>**\n\n**!tagbot commands**\n\n**!tagbot healthcheck**\n\n**!tagbot support**\n\n**!tagbot list**",
             inline=True,
         )
         embedded_help_msg.add_field(
             name="",
-            value="Get a user's gaming tags.\n\nSave user gaming tag to platform.\n\nDisplay available commands.\n\nDisplay status of TagBot.\n\nDisplay support information for Tagbot.",
+            value="Get a user's gaming tags.\n\nSave user gaming tag to platform.\n\nDisplay available commands.\n\nDisplay status of TagBot.\n\nDisplay support information for Tagbot.\n\n Display list of supported platforms.",
             inline=True,
         )
         logger.info(f"HELP: Sent command list to channel.")
