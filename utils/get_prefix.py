@@ -17,5 +17,5 @@ def get_prefix(bot, message):
         List[str]: A list of valid prefixes for the given message context.
                   Includes both direct mentions of the bot and the string prefixes.
     """
-    prefixes = ["tagbot ", "Tagbot "]
+    prefixes = ["!tagbot ", "!Tagbot "]
     return commands.when_mentioned_or(*prefixes)(bot, message)

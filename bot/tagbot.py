@@ -19,7 +19,7 @@ load_dotenv()
 TAG_EXPIRATION = os.getenv("TAG_EXPIRATION")
 COUCHBASE_USERNAME = os.getenv("COUCHBASE_USERNAME")
 COUCHBASE_PASSWORD = os.getenv("COUCHBASE_PASSWORD")
-COUCHBASE_BUCKET_NAME = os.getenv("COUCHBASE_BUCKET_NAME")
+COUCHBASE_BUCKET_NAME = os.getenv("COUCHBASE_BUCKET")
 COUCHBASE_COLLECTION = os.getenv("COUCHBASE_COLLECTION")
 DISCORD_IMAGE = os.getenv("DISCORD_IMAGE") or ''
 
@@ -49,7 +49,7 @@ class TagBot(commands.Cog):
             couchbase_db = CouchbaseDB(
                 os.getenv("COUCHBASE_USERNAME"),
                 os.getenv("COUCHBASE_PASSWORD"),
-                os.getenv("COUCHBASE_BUCKET_NAME"),
+                os.getenv("COUCHBASE_BUCKET"),
             )
             couchbase_db.cluster.wait_until_ready(timedelta(seconds=10))
             logger.info("COUCHBASE: Connected successfully to Couchbase.")
@@ -215,7 +215,7 @@ class TagBot(commands.Cog):
         if not ctx.message.mentions:
             logger.info(f"TAG: No mentions found in message.")
             await ctx.send(
-                "Please mention the Discord user when using TagBot. _*Example*: tagbot tag @thestrugglingblack_ "
+                "Please mention the Discord user when using TagBot. _*Example*: !tagbot tag @thestrugglingblack_ "
             )
             return
 
@@ -260,7 +260,7 @@ class TagBot(commands.Cog):
             else:
                 logger.info(f"COUCHBASE: {user_id} not found - no tags registered")
                 await ctx.send(
-                    f"{mention_user.name} doesn't have any tags set up yet. They can add tags using the `tagbot add` command."
+                    f"{mention_user.name} doesn't have any tags set up yet. They can add tags using the `!tagbot add` command."
                 )
         except Exception as e:
             logger.error(f"EXCEPTION: Error in tag command, {e}")
@@ -273,15 +273,18 @@ class TagBot(commands.Cog):
     async def add(self, ctx):
         logger.info(f"ADD: {ctx.author.id} called the command.")
         user_id = ctx.author.id
+        content = ctx.message.content
 
-        parts = ctx.message.content.strip().split()
+        command_part = content[len(ctx.prefix) :].strip()
+
+        parts = command_part.split()
 
         if len(parts) < 3:
-            await self._send_error(ctx, "Usage: `tagbot add <platform> <tag>`")
+            await self._send_error(ctx, "Usage: `!tagbot add <platform> <tag>`")
             return
 
-        platform = parts[2].lower()
-        tag = " ".join(parts[3:])
+        platform = parts[1].lower()  # platform
+        tag = " ".join(parts[2:])  # Rest is the tag
 
         if platform not in PLATFORMS:
             valid_platforms = ", ".join(PLATFORMS.keys())
@@ -375,14 +378,14 @@ class TagBot(commands.Cog):
         await ctx.send(embed=support_embed)
 
     @commands.cooldown(3, 30, commands.BucketType.user)
-    @commands.command(name="help")
+    @commands.command(name="commands")
     async def help_command(self, ctx):
-        logger.info(f"HELP: {ctx.author.id} called command.")
+        logger.info(f"COMMANDS: {ctx.author.id} called command.")
         embedded_help_msg = Embed(title="Commands", color=0xB4B4B4)
         embedded_help_msg.set_thumbnail(url=DISCORD_IMAGE)
         embedded_help_msg.add_field(
             name="",
-            value="**tagbot tag @user**\n\n**tagbot add <platform> <tag>**\n\n**tagbot help**\n\n**tagbot healthcheck**\n\n**tagbot support**",
+            value="**!tagbot tag @user**\n\n**!tagbot add <platform> <tag>**\n\n**!tagbot commands**\n\n**!tagbot healthcheck**\n\n**!tagbot support**",
             inline=True,
         )
         embedded_help_msg.add_field(
@@ -390,5 +393,13 @@ class TagBot(commands.Cog):
             value="Get a user's gaming tags.\n\nSave user gaming tag to platform.\n\nDisplay available commands.\n\nDisplay status of TagBot.\n\nDisplay support information for Tagbot.",
             inline=True,
         )
-        logger.info(f"HELP: Sent help command to channel.")
+        logger.info(f"HELP: Sent command list to channel.")
         await ctx.send(embed=embedded_help_msg)
+
+    @commands.cooldown(3, 30, commands.BucketType.user)
+    @commands.command(name="list")
+    async def list_platforms(self, ctx):
+        logger.info(f"LIST: {ctx.author.id} called list platforms.")
+        await ctx.send(
+            f'Tagbot supports the following platforms {", ".join(PLATFORMS.keys())}'
+        )

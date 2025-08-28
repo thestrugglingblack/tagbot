@@ -2,6 +2,9 @@ services:
   redis:
     image: redis:latest
     container_name: redis
+    command: redis-server --requirepass password
+    environment:
+      - REDIS_PASSWORD=password
     ports:
       - "6379:6379"
     volumes:
@@ -22,14 +25,14 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
-#    command: >
-#      /bin/bash -c "/entrypoint.sh couchbase-server &
-#      until curl -s http://localhost:8091/pools > /dev/null; do echo 'Waiting for Couchbase...'; sleep 5; done &&
-#      echo 'Couchbase is ready, initializing cluster...' &&
-#      sleep 60 &&
-#      couchbase-cli cluster-init -c localhost:8091 --cluster-username admin --cluster-password securepassword --cluster-name tagbot --services data,index,query,fts &&
-#      couchbase-cli bucket-create -c localhost:8091 -u admin -p securepassword --bucket tagbot --bucket-type couchbase --bucket-ramsize 256"
-#
+    command: >
+      /bin/bash -c "/entrypoint.sh couchbase-server &
+      until curl -s http://localhost:8091/pools > /dev/null; do echo 'Waiting for Couchbase...'; sleep 5; done &&
+      echo 'Couchbase is ready, initializing cluster...' &&
+      sleep 60 &&
+      couchbase-cli cluster-init -c localhost:8091 --cluster-username admin --cluster-password securepassword --cluster-name tagbot --services data,index,query,fts &&
+      couchbase-cli bucket-create -c localhost:8091 -u admin -p securepassword --bucket tagbot --bucket-type couchbase --bucket-ramsize 256"
+
 
 
 volumes:

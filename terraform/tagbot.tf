@@ -52,7 +52,7 @@ resource "azurerm_container_group" "tagbot_discord" {
       "DISCORD_APPLICATION_ID" = var.discord_application_id
       "DISCORD_PUBLIC_ID"      = var.discord_public_id
       "COUCHBASE_USERNAME"     = var.couchbase_admin_username
-      "COUCHBASE_BUCKET_NAME"  = var.couchbase_bucket_name
+      "COUCHBASE_BUCKET"       = var.couchbase_bucket_name
       "COUCHBASE_COLLECTION"   = var.couchbase_collection
       "COUCHBASE_SCOPE"        = var.couchbase_scope
       "TAG_EXPIRATION"         = var.tag_expiration

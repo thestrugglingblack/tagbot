@@ -14,7 +14,7 @@ const userFAQs = [
     questions: [
       {
         question: 'How do I add my gamer tag to TagBot?',
-        answer: 'Easy! Just hop into a channel with TagBot and type: `tagbot add [platform] [gamer tag]`. Example: `tagbot add wb getoverhere`.'
+        answer: 'Easy! Just hop into a channel with TagBot and type: `!tagbot add [platform] [gamer tag]`. Example: `tagbot add wb getoverhere`.'
       },
       {
         question: 'Can I add multiple gamer tags for a platform?',
@@ -22,11 +22,11 @@ const userFAQs = [
       },
       {
         question: 'How do I update my gamer tag if I change my username?',
-        answer: 'Just run the same add command again: `tagbot add [platform] [gamer tag]`. TagBot will overwrite your old one with the new hotness.'
+        answer: 'Just run the same add command again: `!tagbot add [platform] [gamer tag]`. TagBot will overwrite your old one with the new hotness.'
       },
       {
         question: 'What platforms does TagBot support?',
-        answer: 'Right now TagBot supports PlayStation Network and Warner Brothers (perfect for Mortal Kombat). If the FGC wants it, we’ll expand to Steam, Xbox, and more!'
+        answer: 'Right now TagBot supports PlayStation Network, Warner Brothers, Steam, Street Fighter, Tekken and Xbox.'
       }
     ]
   },
@@ -35,7 +35,7 @@ const userFAQs = [
     questions: [
       {
         question: 'How do I check what gamer tag I have stored?',
-        answer: 'Type: `tagbot tag [discord username]`. You’ll see all the tags you’ve saved so far.'
+        answer: 'Type: `!tagbot tag [discord username]`. You’ll see all the tags you’ve saved so far.'
       },
       {
         question: 'Can I delete my gamer tag from the bot?',
@@ -52,7 +52,7 @@ const userFAQs = [
     questions: [
       {
         question: 'How do I look up someone else\'s gamer tag?',
-        answer: 'Simple! Type: `tagbot tag [discord username]` and you’ll get their stored tag instantly.'
+        answer: 'Simple! Type: `!tagbot tag [discord username]` and you’ll get their stored tag instantly.'
       },
       {
         question: 'I get an error when trying to add my tag. What\'s wrong?',
@@ -60,7 +60,7 @@ const userFAQs = [
       },
       {
         question: 'How do I know if TagBot is online and working?',
-        answer: 'Run `tagbot healthcheck`. If you get a response, the bot’s alive and kicking.'
+        answer: 'Run `!tagbot healthcheck`. If you get a response, the bot’s alive and kicking.'
       }
     ]
   },
@@ -102,7 +102,7 @@ const userFAQs = [
       },
       {
         question: 'What if I want to use a different gamer tag for a specific tournament?',
-        answer: 'You’ll need to update your stored tag with: `tagbot add [platform] [gamer tag]`. Quick and easy.'
+        answer: 'You’ll need to update your stored tag with: `!tagbot add [platform] [gamer tag]`. Quick and easy.'
       }
     ]
   }
@@ -137,19 +137,19 @@ const userFAQs = [
             <h2 className="text-2xl font-bold text-gray-900 mb-4">Essential Commands for Players</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="bg-gray-50 p-4 rounded-lg">
-                <code className="text-purple-600 font-mono">tagbot add [platform] [name]</code>
+                <code className="text-purple-600 font-mono">!tagbot add [platform] [name]</code>
                 <p className="text-sm text-gray-600 mt-1">Add or update gamer tag</p>
               </div>
               <div className="bg-gray-50 p-4 rounded-lg">
-                <code className="text-purple-600 font-mono">tagbot tag [discord username]</code>
+                <code className="text-purple-600 font-mono">!tagbot tag [discord username]</code>
                 <p className="text-sm text-gray-600 mt-1">Retrieve gamer tag</p>
               </div>
               <div className="bg-gray-50 p-4 rounded-lg">
-                <code className="text-purple-600 font-mono">tagbot help</code>
+                <code className="text-purple-600 font-mono">!tagbot commands</code>
                 <p className="text-sm text-gray-600 mt-1">Display available commands</p>
               </div>
               <div className="bg-gray-50 p-4 rounded-lg">
-                <code className="text-purple-600 font-mono">tagbot healthcheck</code>
+                <code className="text-purple-600 font-mono">!tagbot healthcheck</code>
                 <p className="text-sm text-gray-600 mt-1">Check Tagbot status</p>
               </div>
             </div>
