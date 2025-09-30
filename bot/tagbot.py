@@ -171,7 +171,9 @@ class TagBot(commands.Cog):
             )
 
             health_embed.add_field(name="🤖 Bot Status", value=bot_status, inline=True)
-            health_embed.add_field(name="💾 Redis Status", value=redis_status, inline=True)
+            health_embed.add_field(
+                name="💾 Redis Status", value=redis_status, inline=True
+            )
             health_embed.add_field(
                 name="🗄️ Couchbase Status", value=couchbase_status, inline=True
             )
@@ -186,7 +188,7 @@ class TagBot(commands.Cog):
             )
 
             if status_details and any(
-                    "❌" in detail or "⚠️" in detail for detail in status_details
+                "❌" in detail or "⚠️" in detail for detail in status_details
             ):
                 health_embed.add_field(
                     name="🔍 Detailed Status",
@@ -413,9 +415,9 @@ class TagBot(commands.Cog):
     times = [
         datetime.time(hour=6, tzinfo=utc),
         datetime.time(hour=6, tzinfo=utc),
-        datetime.time(hour=12,  tzinfo=utc),
+        datetime.time(hour=12, tzinfo=utc),
         datetime.time(hour=18, tzinfo=utc),
-        datetime.time(hour=0,tzinfo=utc)
+        datetime.time(hour=0, tzinfo=utc),
     ]
 
     @tasks.loop(time=times)
@@ -423,6 +425,8 @@ class TagBot(commands.Cog):
         user_id = 268568800042024961
         try:
             self._get_tag_from_couchbase(user_id)
-            logger.info(f'PING DATABASE: {user_id} was a success.')
+            logger.info(f"PING DATABASE: {user_id} was a success.")
         except Exception as e:
-            logger.error(f"ERROR: Ping utility failed. Activate cluster via Capella site {e}")
+            logger.error(
+                f"ERROR: Ping utility failed. Activate cluster via Capella site {e}"
+            )
